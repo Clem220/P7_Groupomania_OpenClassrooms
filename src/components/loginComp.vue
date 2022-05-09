@@ -14,19 +14,37 @@
         />
 
         <div class="error-message">{{ message }}</div>
-
-        <button class="button btn-3" id="login-btn" type="submit">
-          <span>Connexion</span>
-        </button>
+        <router-link
+        to="/postView"
+        aria-label="connexion"
+        >
+        <button class="button btn-3">Connexion </button>
+        </router-link>
+        
       </form>
-      <button class="button signup btn-7">
-        <span>Inscription</span>
-      </button>
+     <h3> Vous n'avez pas de compte ? </h3>
+     <router-link
+        to="/signup"
+        aria-label="s'inscrire"
+        >
+        <button class="button btn-7"> S'inscrire </button>
+        </router-link
+      >
+    
     </div>
 
 </template>
 
-<script></script>
+<script>
+import signup from '../views/signupForm.vue'
+export default{
+    name: 'loginForm',
+    componenents: {
+        signup
+    }
+}
+
+</script>
 
 <style lang="scss">
 .logo {
