@@ -1,39 +1,42 @@
 <template>
-  <section class="content">
-        <div class="logo">
-      <img src="../assets/icon-above-font.png" alt="logo groupomania" />
-      <p>Avec Groupomania, partagez et restez en contact avec vos collègues.</p>
-    </div>
-    <loginForm/>
-    <footerComp/>
+<nav>
+      <img src="../assets/icon-left-font.png" alt="logo groupomania" />
+</nav>
+  <section >
+    <loginForm />
   </section>
-  
-
+    <footerComp />
 </template>
 
 <script>
-import FooterComp from '@/components/footerComp.vue'
-import loginForm from '@/components/loginComp.vue'
+import loginForm from "@/components/loginComp.vue";
+import FooterComp from "@/components/footerComp.vue";
 
 export default {
-  name: 'HomeView',
+  name: "HomeView",
   components: {
-   loginForm,
-   FooterComp,
-  }
-}
-
+    loginForm,
+    FooterComp,
+  },
+};
 </script>
 
-<style lang="scss">
-body{
-    background-image: url(../assets/background.jpg);
-  background-clip: cover;
+<style lang="scss" scoped>
+
+nav{
+  justify-content: center;
+  width: 100%;
+  background-color: #fff;
+  img{
+    width: 40%;
+    height: auto;
+  }
 }
-.content {
-  margin-top: 150px;
+section {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   width: 100%;
+  margin-top: 75px;
 }
 </style>

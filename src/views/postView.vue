@@ -1,29 +1,33 @@
 <template>
-    <navApp /> 
-    <postComp /> 
-  <footerComp /> 
+  <navApp />
+  <newPostComp />
+  <postComp />
+  <footerComp />
 </template>
 
 <script>
-import navApp from '../components/navComp.vue'
-import postComp from '../components/postComp.vue'
-import footerComp from '../components/footerComp.vue'
+import navApp from "@/components/navComp.vue";
+import newPostComp from "@/components/newPostComp.vue";
+import postComp from "@/components/postComp"
+import footerComp from "@/components/footerComp.vue";
 
 export default {
-  name: 'postView',
+  name: "postView",
   components: {
-   navApp,
-   postComp,
-   footerComp,
-  }
-}
+    navApp,
+    newPostComp,
+    postComp,
+    footerComp,
+  },
+};
 </script>
 
-<style lang="scss">
-body{
-  margin: 0;
+<style lang="scss" scoped>
+.contentForNewpost {
+  margin-top: 130px;
 }
-div{
+
+div {
   display: flex;
   justify-content: center;
 }

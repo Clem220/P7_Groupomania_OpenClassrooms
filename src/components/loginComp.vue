@@ -1,52 +1,48 @@
 <template>
+  <div class="logForm">
+    <h1> Groupomania, partagez et restez en contact avec vos collègues.</h1>
+    <form class="logForm__input">
+      <label for="login-email">Email :</label>
+      <input id="login-email" type="text" placeholder="Email" required />
 
-    <div class="logForm">
-      <form class="logForm__input">
-        <label for="login-email">Email :</label>
-        <input id="login-email" type="text" placeholder="Email" required />
-
-        <label for="login-password">Mot de passe :</label>
-        <input
-          id="login-password"
-          type="password"
-          placeholder="Mot de passe"
-          required
-        />
-
-        <div class="error-message">{{ message }}</div>
-        <router-link
-        to="/postView"
-        aria-label="connexion"
-        >
-        <button class="button btn-3">Connexion </button>
-        </router-link>
-        
-      </form>
-     <h3> Vous n'avez pas de compte ? </h3>
-     <router-link
-        to="/signup"
-        aria-label="s'inscrire"
-        >
-        <button class="button btn-7"> S'inscrire </button>
-        </router-link
-      >
-    
-    </div>
-
+      <label for="login-password">Mot de passe :</label>
+      <input
+        id="login-password"
+        type="password"
+        placeholder="Mot de passe"
+        required
+      />
+      <!--  <div class="error-message">{{ message }}</div> -->
+      <router-link to="/postView" aria-label="connexion">
+        <button class="button btn-3">
+          <span>
+            Connexion
+          </span>
+          </button>
+      </router-link>
+    </form>
+    <h3>Vous n'avez pas encore de compte ?</h3>
+    <router-link to="/signup" aria-label="s'inscrire">
+      <button class="button btn-7">
+        <span>
+          S'inscrire
+        </span>
+        </button>
+    </router-link>
+  </div>
 </template>
 
 <script>
-import signup from '../views/signupForm.vue'
-export default{
-    name: 'loginForm',
-    componenents: {
-        signup
-    }
-}
-
+import signup from "../views/signupForm.vue";
+export default {
+  name: "loginForm",
+  componenents: {
+    signup,
+  },
+};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .logo {
   display: flex;
   flex-direction: column;
@@ -62,18 +58,19 @@ export default{
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 400px;
-  height: 400px;
+  width: 500px;
+  height: 500px;
   background-color: #fff;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   border-radius: 40px;
-  margin-left: 150px;
+  h1{
+    padding: 0px 40px;
+  }
   &__input {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 50px;
     padding-bottom: 30px;
     border-bottom: 1px solid #c2c2c2;
     input {
@@ -108,8 +105,12 @@ label {
 }
 
 .btn-3 {
-  background: rgb(255,27,0);
-  background: linear-gradient(0deg, rgba(255,27,0,1) 0%, rgba(251,75,2,1) 100%);
+  background: rgb(255, 27, 0);
+  background: linear-gradient(
+    0deg,
+    rgba(255, 27, 0, 1) 0%,
+    rgba(251, 75, 2, 1) 100%
+  );
   width: 130px;
   height: 40px;
   line-height: 42px;
@@ -128,7 +129,7 @@ label {
   content: "";
   right: 0;
   top: 0;
-  background: rgb(255,27,0);
+  background: rgb(255, 27, 0);
   transition: all 0.3s ease;
 }
 .btn-3:before {
@@ -150,7 +151,7 @@ label {
   width: 100%;
 }
 .btn-3 span:hover {
-  color: rgb(255,27,0);
+  color: rgb(255, 27, 0);
 }
 .btn-3 span:before,
 .btn-3 span:after {
@@ -158,7 +159,7 @@ label {
   content: "";
   left: 0;
   bottom: 0;
-  background: rgb(255,27,0);
+  background: rgb(255, 27, 0);
   transition: all 0.3s ease;
 }
 .btn-3 span:before {
@@ -185,7 +186,6 @@ label {
   line-height: 42px;
   padding: 0;
   border: none;
-  margin-top: 50px;
 }
 .btn-7 span {
   position: relative;
