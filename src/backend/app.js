@@ -1,7 +1,10 @@
 const express = require('express');
-const bodyParser = require ('body-parser');
+const bodyParser = require('body-parser');
+//const helmet = require('helmet');
+const cors = require('cors');
 
-const userRoutes = require('./routes/post');
+//const userRoutes = require('./routes/user');
+const postRoutes = require('./routes/post');
 
 const app = express();
 
@@ -13,9 +16,14 @@ app.use((req, res, next) => {
     next();
 });
 
-// Security & data
+//Security & data
 app.use(bodyParser.json());
+//app.use(helmet());
+app.use(cors());
 
-//routes
-app.use('/api/auth', userRoutes)
+//Routes
+//app.use('/api/auth', userRoutes);
+app.use('/api/posts', postRoutes);
+
+
 module.exports = app;
