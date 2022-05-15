@@ -7,12 +7,25 @@
       <router-link to="/profilView" aria-label="profil">
         <span>Profil</span>
       </router-link>
-      <router-link to="/">
+      <router-link to="/" @click = logout()>
         <span>Déconnexion</span>
       </router-link>
     </div>
   </nav>
 </template>
+
+<script>
+/* eslint-disable */
+export default {
+        name: 'navComp',
+        methods:{
+            logout(){
+                sessionStorage.clear();
+                this.$router.push('/')
+            }
+        }    
+}
+</script>
 
 <style lang="scss" scoped>
 nav {

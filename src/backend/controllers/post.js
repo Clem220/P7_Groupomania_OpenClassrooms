@@ -1,103 +1,80 @@
-const db = require("../database_connect");
-// All post
-exports.getAllPost = (req, res, next) => {
-    db.query('SELECT users.nom, users.prenom, posts.id, posts.userId, posts.title, posts.content, posts.date AS date FROM users INNER JOIN posts ON users.id = posts.userId ORDER BY date DESC', (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
-    });
+/* eslint-disable no-unused-vars */
+
+const fs = require('fs'); 
+const models=require('../models/index.js')
+const jwt = require('jsonwebtoken');
+
+
+exports.deletePost = (req, res, next) => {
+    // nous utilisons l'ID que nous recevons comme paramètre pour accéder au post correspondant dans la base de données 
+            models.posts.findOne ({ 
+                where: { id: req.params.id }})          
+                  models.posts.destroy({where:{id: req.params.id }})
+                    .then(() => res.status(200).json({ message: 'post supprimé !'}))
+                    .catch(error => res.status(400).json({ error }));
+            
 };
-// NewPost
-exports.newPost = (req, res, next) => {
-    db.query(`INSERT INTO posts VALUES (NULL, '${req.body.userId}', '${req.body.title}', NOW(), '${req.body.content}')`, (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(201).json({
-            message: 'Votre post à été publié !'
+
+exports.createPost = (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_KEY);
+    const userId = decodedToken.userId;
+
+if (!req.file) {
+    return models.posts.create({
+        userId: userId,
+        content: req.body.content,
+        title: req.body.title,
+        image: "",
+    })
+        .then((post) => res.status(201).json(post))
+        .catch((error) => {console.log(error)
+             res.status(500).json(error)});
+
+    } else if (req.file) {
+        models.posts.create({
+            userId: userId,
+            content: req.body.content,
+            title: req.body.title,
+            image: `${req.protocol}://${req.get("host")}/images/${
+                req.file.filename
+            }`,
         })
-    });
+            .then((post) => res.status(201).json({post}))
+            .catch((error) => res.status(500).json(error));
+    }
 };
-// OnePost
-exports.getOnePost = (req, res, next) => {
-    db.query(`SELECT * FROM posts WHERE posts.id = ${req.params.id}`, (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
-    });
+
+
+exports.findAllPostUser= (req, res, next) => {
+
+  models.posts.findAll({
+    order:[[
+        'createdAt', 'DESC'
+   ]],
+    include:{
+        model:models.users,
+    },
+     where: { userId: req.params.userId }
+    })
+    .then((post) => res.status(200).json(post))
+    .catch((error) => res.status(500).json(error));
 };
-// Delete OnePost
-exports.deleteOnePost = (req, res, next) => {
-    db.query(`DELETE FROM posts WHERE posts.id = ${req.params.id}`, (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
-    });
-};
-// Modify OnePost
-exports.modifyOnePost = (req, res, next) => {
-    db.query(`UPDATE posts SET title = '${req.body.title}', content = '${req.body.content}' WHERE posts.id = ${req.params.id}`, (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
-    });
-};
-// Get User's Posts
-exports.getUserPosts = (req, res, next) => {
-    db.query(`SELECT * FROM posts WHERE posts.userId = ${req.params.id}`, (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
-    });
-};
-// New comment
-exports.newComment = (req, res, next) => {
-    db.query(`INSERT INTO comments VALUES (NULL, ${req.body.userId}, ${req.params.id}, NOW(), '${req.body.content}')`, (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
-    });
-};
-// Get all comments
-exports.getAllComments = (req, res, next) => {
-    db.query(`SELECT users.id, users.nom, users.prenom, comments.id,comments.content, comments.userId, comments.date FROM users INNER JOIN comments ON users.id = comments.userId WHERE comments.postId = ${req.params.id} ORDER BY comments.date DESC`,
-        (error, result, field) => {
-            if (error) {
-                return res.status(400).json({
-                    error
-                });
-            }
-            return res.status(200).json(result);
-        });
-};
-//Delete comment
-exports.deleteComment = (req, res, next) => {
-    db.query(`DELETE FROM comments WHERE comments.id = ${req.params.id}`, (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
-    });
-};
+     
+exports.getAllPosts = (req, res, next) => {
+    models.posts.findAll({
+        order:[[
+             'createdAt', 'DESC'
+        ]],
+         include:{
+             model:models.users,
+         }}).then(posts => {
+       return res.status(200).json(posts);
+     }).catch(error => {
+        return res.status(500).json({
+            
+         });
+     });
+    };
+
+    

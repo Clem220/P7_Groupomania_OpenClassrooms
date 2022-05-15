@@ -1,11 +1,15 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
-const routeur = express.Router();
-const auth = require('../middlewares/auth');
-
+const router = express.Router();
+const auth = require('../middleware/auth')
 const userCtrl = require('../controllers/user');
 
-routeur.post('/signup', userCtrl.signup);
-routeur.post('/login', userCtrl.login);
-routeur.delete('/:id', auth, userCtrl.deleteUser);
+router.post('/signup', userCtrl.signup);
+router.post('/login', userCtrl.login);
+router.get('/:id',userCtrl.getOneUser)
+router.get('/',userCtrl.getAllUsers)
+router.get('/:id/posts/comments',userCtrl.findPostCom);
+router.put('/:id',userCtrl.updateUser)
+router.delete('/:id',userCtrl.deleteUser)
 
-module.exports = routeur;
+module.exports = router;

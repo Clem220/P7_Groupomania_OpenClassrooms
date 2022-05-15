@@ -1,38 +1,30 @@
 <template>
-  <navComp />
-  <div class="profilContent">
-    <div class="profilInfo">
-      <div class="profilInfo__img">
-        <img src="../assets/image-attractive.jpeg" alt="photo de profil" />
-      </div>
-      <h2 class="profilName">Clément Vermeulen</h2>
-      <div class="profilModifier">
-        <button class="delButton">Supprimer le compte</button>
-      </div>
-    </div>
-  </div>
-  <newPostComp />
-
-  <post-comp />
-
-  <footerComp />
+  <navComp  />
+  <profilComp  />
+  <newPostComp  />
+ <!-- <post-comp /> -->
+  <footerComp  />
 </template>
 
 <script>
-import newPostComp from "@/components/newPostComp.vue";
 import navComp from "@/components/navComp.vue";
+import profilComp from "@/components/profilComp.vue";
+import newPostComp from "@/components/newPostComp.vue";
+//import PostComp from "@/components/postComp.vue";
 import footerComp from "@/components/footerComp.vue";
-import PostComp from "@/components/postComp.vue";
+
+
 
 export default {
   name: "postView",
   components: {
     navComp,
+    profilComp,
     newPostComp,
+   // PostComp,
     footerComp,
-    PostComp,
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

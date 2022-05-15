@@ -1,88 +1,212 @@
 <template>
-<section class="articleContent">
-  <article class="postContent">
-    <div class="postContent__profilInfo">
-      <p>Clément Vermeulen le 24/07/2021</p>
-    </div>
-    <div class="postContent__content">
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sit amet
-        ipsum vel est pellentesque placerat pulvinar eget lorem. Donec et
-        ultrices libero. In hac habitasse platea dictumst. Sed nulla neque,
-        rutrum vel neque vitae, vulputate scelerisque est. Sed facilisis lectus
-        magna, vel aliquam nulla sagittis in. Etiam facilisis pulvinar massa
-        quis efficitur. Sed rutrum elit nec enim facilisis, non sagittis dui
-        blandit. Praesent semper eros nisi, ac hendrerit leo volutpat sit amet.
-        Ut ut dui non massa feugiat interdum. Pellentesque fringilla risus vitae
-        est porttitor ultrices. Nulla tincidunt, elit nec condimentum tristique,
-        libero eros ullamcorper nunc, eget venenatis elit velit in enim. Aenean
-        efficitur dictum risus at gravida. Morbi sit amet posuere dolor. Fusce
-        eu fermentum urna. Donec eu eleifend libero. Integer euismod turpis
-        urna, sit amet condimentum felis molestie et. Etiam efficitur dolor
-        velit. Nulla sollicitudin eros in enim feugiat ullamcorper. Nam pulvinar
-        congue eros, efficitur vehicula purus commodo non. Suspendisse aliquam
-        augue sit amet urna tincidunt aliquet. Nullam id pulvinar erat. Fusce
-        pretium massa at nunc tristique tincidunt. Sed eu sem eu nunc vehicula
-        feugiat. Etiam vestibulum leo diam, quis gravida diam venenatis in.
-        Fusce condimentum massa orci, sed consequat libero convallis at. Fusce
-        mollis velit eu tellus faucibus, id suscipit enim semper.
-      </p>
-    </div>
-  </article>
-  <article class="postContent">
-    <div class="postContent__profilInfo">
-      <p>Clément Vermeulen le 24/07/2021</p>
-    </div>
-    <div class="postContent__content">
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sit amet
-        ipsum vel est pellentesque placerat pulvinar eget lorem. Donec et
-        ultrices libero. In hac habitasse platea dictumst. Sed nulla neque,
-        rutrum vel neque vitae, vulputate scelerisque est. Sed facilisis lectus
-        magna, vel aliquam nulla sagittis in. Etiam facilisis pulvinar massa
-        quis efficitur. Sed rutrum elit nec enim facilisis, non sagittis dui
-        blandit. Praesent semper eros nisi, ac hendrerit leo volutpat sit amet.
-        Ut ut dui non massa feugiat interdum. Pellentesque fringilla risus vitae
-        est porttitor ultrices. Nulla tincidunt, elit nec condimentum tristique,
-        libero eros ullamcorper nunc, eget venenatis elit velit in enim. Aenean
-        efficitur dictum risus at gravida. Morbi sit amet posuere dolor. Fusce
-        eu fermentum urna. Donec eu eleifend libero. Integer euismod turpis
-        urna, sit amet condimentum felis molestie et. Etiam efficitur dolor
-        velit. Nulla sollicitudin eros in enim feugiat ullamcorper. Nam pulvinar
-        congue eros, efficitur vehicula purus commodo non. Suspendisse aliquam
-        augue sit amet urna tincidunt aliquet. Nullam id pulvinar erat. Fusce
-        pretium massa at nunc tristique tincidunt. Sed eu sem eu nunc vehicula
-        feugiat. Etiam vestibulum leo diam, quis gravida diam venenatis in.
-        Fusce condimentum massa orci, sed consequat libero convallis at. Fusce
-        mollis velit eu tellus faucibus, id suscipit enim semper.
-      </p>
-    </div>
-  </article>
-</section>
-</template>
+    <section class=" postContent">
+    <article class="content">
+          <h6 class="mb-0">
+            {{ post.user.lastName }} {{ post.user.firstName }}
+          </h6>
+          <span class="date"> {{ formatDate(post.createdAt) }} </span>
+        
+      <p class="title">{{ post.title }}</p>
+      <p class="content">{{ post.content }}</p>
+    
+      <button
+        class="btn btn-primary btn-sm ms-1"
+        v-if="post.userId === user.id || user.admin === true"
+        @click="deletePostEvent"
+      >
+        Supprimer
+      </button>
+    </article>
 
+    <article class="card p-3 mt-3">
+      <h2>Commentaires</h2>
+      <div
+        class="d-flex flex-column mt-2"
+        v-for="comment in comments"
+        v-bind:key="comment.id"
+        :comment="comment"
+      >
+        <div class="d-flex flex-column">
+            <h6 class="mb-0">
+              {{ comment.user.firstName }} {{ comment.user.lastName }}
+            </h6>
+            <span class="date">{{ formatDate(comment.createdAt) }}</span>
+        </div>
+        <div class="com d-flex justify-content-between">
+          <p class="content">{{ comment.comment }}</p>
+          <button
+            class="btn btn-outline-secondary btn-sm"
+            v-if="comment.userId === user.id || user.admin === true"
+            @click.prevent="deleteCom(comment)"
+          >
+          </button>
+        </div>
+      </div>
+      <form class="comment__form">
+        <input
+          class="comment__form__input"
+          v-model="comment"
+          placeholder="Ecrire un commentaire..."
+        />
+        <div class="comment__form__message">{{ message }}</div>
+
+        
+          <button
+            class="btn btn-outline-secondary btn-sm"
+            @click.prevent="createCom(post)"
+          >
+            Poster
+          </button>
+      </form>
+    </article>
+    </section>
+ 
+</template>
+<script>
+/* eslint-disable */
+import axios from "axios";
+export default {
+  name: "post",
+  data() {
+    return {
+      user: [],
+      comments: [],
+      createdAt: "",
+      comment: [],
+      firstName: "",
+      lastName: "",
+      title: "",
+      message: "",
+      content:'',
+      posts:[],
+      
+    };
+  },
+  props: {
+    post: {
+      type: Object,
+      required: true,
+    },
+  },
+  created() {
+    const userId = sessionStorage.getItem("user");
+    axios
+      .get("http://localhost:3000/api/users/" + userId, {
+        headers: {
+          Authorization: "Bearer " + sessionStorage.token,
+        },
+      })
+      .then((response) => (this.user = response.data))
+      .catch((err) => console.log(err));
+    axios
+      .get("http://localhost:3000/api/auth/comments/" + this.post.id, {
+        headers: {
+          Authorization: "Bearer " + sessionStorage.token,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        this.comments = response.data;
+      })
+      .catch((err) => console.log(err));
+  },
+  methods: {
+    formatDate(date) {
+      return new Date(date).toLocaleDateString("fr-FR", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      });
+    },
+    deletePostEvent() {
+      this.$emit("deletePostEvent", this.post);
+    },
+    createCom(post) {
+      if (this.comment == "") {
+        this.message = "Ne pas poster avec un champs vide";
+      } else {
+        axios
+          .post(
+            "http://localhost:3000/api/auth/comments/",
+            { comment: this.comment, postId: post.id },
+            {
+              headers: {
+                Authorization: "Bearer " + sessionStorage.token,
+              },
+            }
+          )
+          .then((response) => {
+            console.log(response);
+            this.comment = "";
+            axios
+              .get("http://localhost:3000/api/auth/comments/" + this.post.id, {
+                headers: {
+                  Authorization: "Bearer " + sessionStorage.token,
+                },
+              })
+              .then((response) => {
+                console.log(response);
+                this.comments = response.data;
+                this.message = "";
+              })
+              .catch((err) => console.log(err));
+          })
+          .catch((err) => console.log(err));
+      }
+    },
+    deleteCom(comment) {
+      axios
+        .delete("http://localhost:3000/api/auth/comments/" + comment.id, {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.token,
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          axios
+            .get("http://localhost:3000/api/auth/comments/" + this.post.id, {
+              headers: {
+                Authorization: "Bearer " + sessionStorage.token,
+              },
+            })
+            .then((response) => {
+              console.log(response);
+              this.comments = response.data;
+            })
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => console.log(err));
+    },
+    
+  },
+};
+</script>
 
 <style lang="scss" scoped>
-@import '../style/mixins';
-.articleContent{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-   
+
+@import "../style/mixins";
+.articleContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
-.postContent{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 680px;
-    height: 300px;
-    overflow: hidden;
-    @include boxShadow;
-    margin:40px 0px 0px 0px;
-    &__content{
-        height: auto;
-        max-height: 200px;
-        overflow: scroll;
-    }
+.postContent {
+  display: flex;
+  margin-top: 200px;
+  flex-direction: column;
+  justify-content: center;
+  width: 680px;
+  height: auto;
+  overflow: hidden;
+  @include boxShadow;
+ // margin: 40px 0px 0px 0px;
+  &__content {
+    height: auto;
+    max-height: 200px;
+    overflow: scroll;
+  }
 }
 </style>

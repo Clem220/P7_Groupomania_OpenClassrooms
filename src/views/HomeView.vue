@@ -3,22 +3,26 @@
       <img src="../assets/icon-left-font.png" alt="logo groupomania" />
 </nav>
   <section >
-    <loginForm />
+    <signupComp />
+   <!-- <loginForm /> -->
   </section>
     <footerComp />
 </template>
 
 <script>
-import loginForm from "@/components/loginComp.vue";
+//import loginForm from "@/components/loginComp.vue";
 import FooterComp from "@/components/footerComp.vue";
+import signupComp from "@/components/signUpComp.vue";
 
 export default {
   name: "HomeView",
   components: {
-    loginForm,
+    signupComp,
+    //loginForm,
     FooterComp,
   },
-};
+
+}
 </script>
 
 <style lang="scss" scoped>

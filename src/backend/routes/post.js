@@ -1,18 +1,25 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 const router = express.Router();
-const auth = require('../middlewares/auth');
-const userCtrl = require('../controllers/post');
 
-//Posts
-router.get('/', auth, userCtrl.getAllPost);
-router.post('/', auth, userCtrl.newPost);
-router.get('/:id', auth, userCtrl.getOnePost);
-router.delete('/:id', auth, userCtrl.deleteOnePost);
-router.put('/:id', auth, userCtrl.modifyOnePost);
-router.get('/user:id/posts', auth, userCtrl.getUserPosts);
-//Commentaires
-router.get('/:id/comments', auth, userCtrl.getAllComments);
-router.post('/:id/comments/', auth, userCtrl.newComment);
-router.delete('/comments/:id', auth, userCtrl.deleteComment);
+const postCtrl=require('../controllers/post');
+//const pour le token
+const auth = require('../middleware/auth');
+const multer = require('../middleware/multer');
+
+//requete get pour afin de renvoyer les posts dans la base de donnee
+router.get('/',postCtrl.getAllPosts);
+
+//requete pour poster un nouvel objet avec multer pour les images
+router.post('/post',postCtrl.createPost); 
+
+//requete pour ciblé et afficher un element grace a son id
+router.get('/:userId',postCtrl.findAllPostUser);
+
+//requete pour supprimer un objet existant
+router.delete('/:id',postCtrl.deletePost );
+//requete pour recuperer tous les commentaire de chaque post
+
+
 
 module.exports = router;
