@@ -1,66 +1,66 @@
 <template>
-    <section class=" postContent">
-    <article class="content">
-          <h6 class="mb-0">
-            {{ post.user.lastName }} {{ post.user.firstName }}
-          </h6>
-          <span class="date"> {{ formatDate(post.createdAt) }} </span>
-        
-      <p class="title">{{ post.title }}</p>
-      <p class="content">{{ post.content }}</p>
-    
+  <section class="postContent">
+    <article class="articleContent">
+      <div class="articleContent__headers">
+        <h6 class="mb-0">{{ post.user.firstName }} {{ post.user.lastName }}</h6>
+        <span class="date"> {{ formatDate(post.createdAt) }} </span>
+      </div>
+      <div class="articleContent__post">
+      <p class="articleContent__title">{{ post.title }}</p>
+      <p class="articleContent__content">{{ post.content }}</p>
+      </div>
       <button
-        class="btn btn-primary btn-sm ms-1"
+        class="button btn-red"
         v-if="post.userId === user.id || user.admin === true"
         @click="deletePostEvent"
       >
-        Supprimer
+        <span> Supprimer </span>
       </button>
     </article>
 
-    <article class="card p-3 mt-3">
-      <h2>Commentaires</h2>
-      <div
-        class="d-flex flex-column mt-2"
-        v-for="comment in comments"
+    <article  class="commentContent" >
+      <div 
+       v-for="comment in comments"
         v-bind:key="comment.id"
         :comment="comment"
       >
-        <div class="d-flex flex-column">
-            <h6 class="mb-0">
-              {{ comment.user.firstName }} {{ comment.user.lastName }}
-            </h6>
-            <span class="date">{{ formatDate(comment.createdAt) }}</span>
+        <div class="commentContent__commentaire"
+        v-if="comment !== null">
+          <p class="commentaireContent">{{ comment.comment }}</p>
         </div>
-        <div class="com d-flex justify-content-between">
-          <p class="content">{{ comment.comment }}</p>
+
+        <div class="commentContent__footer">
+          <h6 class="mb-0">
+            {{ comment.user.firstName }} {{ comment.user.lastName }}
+          </h6>
+          <span class="date">{{ formatDate(comment.createdAt) }}</span>
           <button
-            class="btn btn-outline-secondary btn-sm"
+            class="button btn-red"
             v-if="comment.userId === user.id || user.admin === true"
             @click.prevent="deleteCom(comment)"
           >
+            <span> Supprimer </span>
           </button>
         </div>
       </div>
-      <form class="comment__form">
-        <input
-          class="comment__form__input"
-          v-model="comment"
-          placeholder="Ecrire un commentaire..."
-        />
-        <div class="comment__form__message">{{ message }}</div>
-
-        
-          <button
-            class="btn btn-outline-secondary btn-sm"
-            @click.prevent="createCom(post)"
-          >
-            Poster
-          </button>
-      </form>
     </article>
-    </section>
- 
+    <form class="comment__form">
+      <input
+        class="comment__form__input"
+        v-model="comment"
+        placeholder="Ecrire un commentaire..."
+      />
+
+      <div class="comment__form__message">{{ message }}</div>
+
+      <button
+        class="btn btn-outline-secondary btn-sm"
+        @click.prevent="createCom(post)"
+      >
+        Poster
+      </button>
+    </form>
+  </section>
 </template>
 <script>
 /* eslint-disable */
@@ -77,8 +77,8 @@ export default {
       lastName: "",
       title: "",
       message: "",
-      content:'',
-      posts:[],
+      content: "",
+      posts: [],
       
     };
   },
@@ -105,7 +105,6 @@ export default {
         },
       })
       .then((response) => {
-        console.log(response);
         this.comments = response.data;
       })
       .catch((err) => console.log(err));
@@ -138,8 +137,7 @@ export default {
               },
             }
           )
-          .then((response) => {
-            console.log(response);
+          .then(() => {
             this.comment = "";
             axios
               .get("http://localhost:3000/api/auth/comments/" + this.post.id, {
@@ -148,7 +146,6 @@ export default {
                 },
               })
               .then((response) => {
-                console.log(response);
                 this.comments = response.data;
                 this.message = "";
               })
@@ -164,8 +161,7 @@ export default {
             Authorization: "Bearer " + sessionStorage.token,
           },
         })
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           axios
             .get("http://localhost:3000/api/auth/comments/" + this.post.id, {
               headers: {
@@ -173,40 +169,97 @@ export default {
               },
             })
             .then((response) => {
-              console.log(response);
               this.comments = response.data;
             })
             .catch((err) => console.log(err));
         })
         .catch((err) => console.log(err));
     },
-    
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
 @import "../style/mixins";
-.articleContent {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
+
+@include button;
+@include btn-red;
+
 .postContent {
   display: flex;
-  margin-top: 200px;
+  margin-top: 45px;
   flex-direction: column;
   justify-content: center;
   width: 680px;
   height: auto;
   overflow: hidden;
   @include boxShadow;
- // margin: 40px 0px 0px 0px;
+  // margin: 40px 0px 0px 0px;
   &__content {
     height: auto;
     max-height: 200px;
     overflow: scroll;
+  }
+}
+
+.articleContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #c2c2c2;
+  &__headers {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom: 1px solid #c2c2c2;
+    margin: 0px 80px;
+    h6{
+      padding-right: 40px;
+    }
+  }
+  &__post{
+    width: 70%;
+  }
+}
+
+.commentContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: auto;
+  min-width: 0px;
+  max-height: 200px;
+    overflow: scroll;
+    margin-top: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #c2c2c2;
+  &__commentaire{
+    border-bottom: 1px solid #c2c2c2;
+    border-radius: 20px;
+  }
+  &__footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    h6{
+      padding-right: 20px;
+    }
+    span{
+      padding-right: 20px;
+    }
+  }
+}
+
+.comment__form{
+  margin-top: 20px;
+  &__input{
+    width: 300px;
+    height: 35px;
+    border-radius: 10px;
   }
 }
 </style>

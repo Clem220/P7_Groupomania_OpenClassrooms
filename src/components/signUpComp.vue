@@ -202,7 +202,7 @@ export default {
   &__connect {
       margin-top: 20px;
     &__subtitle {
-        margin: 0;
+      margin: 0;
       display: flex;
       flex-direction: column;
       padding-bottom: 40px;

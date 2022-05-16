@@ -1,19 +1,24 @@
 <template>
-  <navComp  />
-  <profilComp  />
-  <newPostComp  />
- <!-- <post-comp /> -->
-  <footerComp  />
+  <navComp />
+  <profilComp />
+  <newPostComp />
+  <post-comp
+    v-for="post in posts"
+    v-bind:key="post.id"
+    :post="post"
+    @deletePostEvent="deletePost"
+  />
+  <footerComp />
 </template>
 
 <script>
 import navComp from "@/components/navComp.vue";
 import profilComp from "@/components/profilComp.vue";
 import newPostComp from "@/components/newPostComp.vue";
-//import PostComp from "@/components/postComp.vue";
+import PostComp from "@/components/postComp.vue";
 import footerComp from "@/components/footerComp.vue";
 
-
+import axios from "axios";
 
 export default {
   name: "postView",
@@ -21,15 +26,67 @@ export default {
     navComp,
     profilComp,
     newPostComp,
-   // PostComp,
+    PostComp,
     footerComp,
   },
-}
+  data() {
+    return {
+      user: [],
+      posts: [],
+      users: [],
+      content: "",
+      post: [],
+      comment: [],
+      createdAt: "",
+      title: "",
+      message: "",
+    };
+  },
+  created() {
+    const userId = sessionStorage.getItem("user");
+    axios
+      .get("http://localhost:3000/api/users/" + userId, {
+        headers: {
+          Authorization: "Bearer " + sessionStorage.token,
+        },
+      })
+      .then((response) => (this.user = response.data))
+      .catch((err) => console.log(err));
+
+    axios
+      .get("http://localhost:3000/api/auth/posts/" + userId, {
+        headers: {
+          Authorization: "Bearer " + sessionStorage.token,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        this.posts = response.data;
+      })
+      .catch((err) => console.log(err));
+  },
+  methods: {
+    deletePost(item) {
+      axios
+        .delete("http://localhost:3000/api/auth/posts/" + item.id, {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("token"),
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          this.posts = this.posts.filter((post) => post.id != item.id);
+        })
+        .catch((err) => console.log(err));
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-.contentForNewpost{
-  padding:40px 0px 0px 0px;
+@import "../style/mixins";
+.contentForNewpost {
+  padding: 40px 0px 0px 0px;
 }
 .profilContent {
   flex-direction: column;

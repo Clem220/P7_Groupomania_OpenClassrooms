@@ -1,10 +1,10 @@
 <template>
   <section class="contentForNewpost">
     <article class="newPost">
-      <form aria-label="Nouveau message">
-        <form class="newPost__content">
+      <form class="newPost__content">
           <label for="newPost-title">Titre</label>
           <input
+          class="newPost-title"
             v-model="title"
             id="newPost-title"
             type="text"
@@ -31,25 +31,16 @@
 
           <button
             type="submit"
-            class="newPost__option__button"
+            class="button btn-orange"
             aria-label="Publier le message"
             @click="postMessage()"
           >
+          <span>
             Publier
+            </span>
           </button>
         </form>
 
-        <div class="newPost__option">
-          <div class="newPost__option__file">
-            <input
-              type="file"
-              ref="fileUpload"
-              accept="image/*"
-              aria-label="Sélectionner un fichier"
-            />
-          </div>
-        </div>
-      </form>
     </article>
   </section>
 </template>
@@ -69,6 +60,8 @@ export default {
       post: [],
       title: "",
       message: "",
+      image: "",
+      imageUrl: "",
     };
   },
   created() {
@@ -95,45 +88,85 @@ export default {
       .catch((err) => console.log(err));
   },
   methods: {
-    postMessage() {
-      if (this.content == "" || this.title == "") {
-        this.message = "Veuillez inscrire un sujet et un message";
+   selectFile() {
+      this.image = this.$refs.image.files[0];
+      this.imageUrl = URL.createObjectURL(this.image);
+      console.log( this.imageUrl)
+    }, 
+
+   /*  async addPost() {
+      const formData = new FormData();
+      formData.append("image", this.image);
+      formData.append("userId", parseInt(localStorage.getItem("userId")));
+      formData.append("content", document.getElementById("content").value);
+      console.log("test", formData.get("image"));
+      console.log("test", formData.get("content"));
+      if (formData.get("content") == "") {
+        this.error = "Message vide";
       } else {
-        axios
-          .post(
-            "http://localhost:3000/api/auth/posts/post",
-            { content: this.content, title: this.title },
-            {
+        await axios
+          .post("http://localhost:3000/auth/posts/post", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + this.token,
+            },
+          })
+          .then(() => {
+            this.$emit("postResponse");
+            console.log(this.$emit("postResponse"));
+          })
+          .catch((error) => (this.msgError = error));
+        this.image = "";
+        this.content = "";
+      }
+    }, */
+  
+     postMessage() {
+    if (this.content==''|| this.title=='') {
+        (this.message="Veuillez inscrire un sujet et un message")
+    }else{
+      axios
+        .post(
+          "http://localhost:3000/api/auth/posts/post",
+          { content: this.content, title: this.title, imageUrl: this.imageUrl  },
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.token,
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          this.content = "";
+          this.title = "";
+          this.image = this.$refs.image.files[0];
+          this.imageUrl = URL.createObjectURL(this.image);
+          const userId = sessionStorage.getItem("user");
+          axios
+            .get("http://localhost:3000/api/auth/posts/" + userId, {
               headers: {
                 Authorization: "Bearer " + sessionStorage.token,
               },
-            }
-          )
-          .then((response) => {
-            console.log(response);
-            this.content = "";
-            this.title = "";
-            const userId = sessionStorage.getItem("user");
-            axios
-              .get("http://localhost:3000/api/auth/posts/" + userId, {
-                headers: {
-                  Authorization: "Bearer " + sessionStorage.token,
-                },
-              })
-              .then((response) => {
-                console.log(response);
-                this.posts = response.data;
-                this.message = "";
-              })
-              .catch((err) => console.log(err));
-          });
-      }
+            })
+            .then((response) => {
+              console.log(response);
+              this.posts = response.data;
+              this.message = "";
+            })
+            .catch((err) => console.log(err));
+        });
+    }
+  }, 
     },
-  },
-};
+}
+
 </script>
 
 <style lang="scss" scoped>
+@import '../style/mixins';
+
+@include button;
+@include btn-orange;
 section {
   display: flex;
   justify-content: center;
@@ -144,10 +177,13 @@ section {
   justify-content: center;
   align-items: center;
   width: 680px;
-  height: 185px;
+  height: 260px;
   background-color: #fff;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   border-radius: 40px;
+  &-title{
+    margin: 20px;
+  }
   &__content {
     &__text {
       width: 620px;
