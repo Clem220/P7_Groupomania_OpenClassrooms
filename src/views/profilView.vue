@@ -97,6 +97,12 @@ export default {
   width: 910px;
   height: 185px;
   margin-top: 140px;
+  @include phone{
+    @include phone-size
+  }
+  @include tablet{
+    @include tablet-size
+  }
 }
 .profilInfo {
   display: flex;

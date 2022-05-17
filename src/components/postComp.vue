@@ -2,12 +2,12 @@
   <section class="postContent">
     <article class="articleContent">
       <div class="articleContent__headers">
-        <h6 class="mb-0">{{ post.user.firstName }} {{ post.user.lastName }}</h6>
-        <span class="date"> {{ formatDate(post.createdAt) }} </span>
+        <h6>{{ post.user.firstName }} {{ post.user.lastName }}</h6>
+        <span> {{ formatDate(post.createdAt) }} </span>
       </div>
       <div class="articleContent__post">
-      <p class="articleContent__title">{{ post.title }}</p>
-      <p class="articleContent__content">{{ post.content }}</p>
+        <p class="articleContent__title">{{ post.title }}</p>
+        <p class="articleContent__content">{{ post.content }}</p>
       </div>
       <button
         class="button btn-red"
@@ -18,21 +18,18 @@
       </button>
     </article>
 
-    <article  class="commentContent" >
-      <div 
-       v-for="comment in comments"
+    <article class="commentContent">
+      <div
+        v-for="comment in comments"
         v-bind:key="comment.id"
         :comment="comment"
       >
-        <div class="commentContent__commentaire"
-        v-if="comment !== null">
+        <div v-if="comment !== null" class="commentContent__commentaire">
           <p class="commentaireContent">{{ comment.comment }}</p>
         </div>
 
         <div class="commentContent__footer">
-          <h6 class="mb-0">
-            {{ comment.user.firstName }} {{ comment.user.lastName }}
-          </h6>
+          <h6>{{ comment.user.firstName }} {{ comment.user.lastName }}</h6>
           <span class="date">{{ formatDate(comment.createdAt) }}</span>
           <button
             class="button btn-red"
@@ -54,10 +51,10 @@
       <div class="comment__form__message">{{ message }}</div>
 
       <button
-        class="btn btn-outline-secondary btn-sm"
+        class="comment__form__btn button btn-orange"
         @click.prevent="createCom(post)"
       >
-        Poster
+        <span> Poster </span>
       </button>
     </form>
   </section>
@@ -79,7 +76,6 @@ export default {
       message: "",
       content: "",
       posts: [],
-      
     };
   },
   props: {
@@ -184,6 +180,7 @@ export default {
 
 @include button;
 @include btn-red;
+@include btn-orange;
 
 .postContent {
   display: flex;
@@ -194,7 +191,12 @@ export default {
   height: auto;
   overflow: hidden;
   @include boxShadow;
-  // margin: 40px 0px 0px 0px;
+  @include phone{
+    @include phone-size
+  }
+  @include tablet{
+    @include tablet-size
+  };
   &__content {
     height: auto;
     max-height: 200px;
@@ -216,11 +218,11 @@ export default {
     align-items: center;
     border-bottom: 1px solid #c2c2c2;
     margin: 0px 80px;
-    h6{
+    h6 {
       padding-right: 40px;
     }
   }
-  &__post{
+  &__post {
     width: 70%;
   }
 }
@@ -232,11 +234,11 @@ export default {
   height: auto;
   min-width: 0px;
   max-height: 200px;
-    overflow: scroll;
-    margin-top: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #c2c2c2;
-  &__commentaire{
+  overflow: scroll;
+  margin-top: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #c2c2c2;
+  &__commentaire {
     border-bottom: 1px solid #c2c2c2;
     border-radius: 20px;
   }
@@ -245,21 +247,24 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    h6{
+    h6 {
       padding-right: 20px;
     }
-    span{
+    span {
       padding-right: 20px;
     }
   }
 }
 
-.comment__form{
+.comment__form {
   margin-top: 20px;
-  &__input{
+  &__input {
     width: 300px;
     height: 35px;
     border-radius: 10px;
+  }
+  &__btn {
+    margin-bottom: 10px;
   }
 }
 </style>

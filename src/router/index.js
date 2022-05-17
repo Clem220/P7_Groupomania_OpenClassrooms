@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/homeView.vue'
-import postView from '../views/postView'
-import profilView from '../views/profilView'
+import HomeView from '@/views/homeView.vue'
+import postView from '@/views/postView'
+import profilView from '@/views/profilView'
+import moderationView from '@/views/moderationView'
 
 const routes = [
   {
@@ -19,6 +20,11 @@ const routes = [
     path: '/profilView',
     name: 'profil',
     component: profilView
+  },
+  {
+    path: '/moderationView',
+    name: 'moderationView',
+    component: moderationView,
   }
 ]
 

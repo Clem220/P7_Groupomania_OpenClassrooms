@@ -21,8 +21,8 @@
         <span> Se connecter</span>
       </button>
     </p>
-    <div class="mgs">{{ message }}</div>
-    <div class="mgs">{{ emessage }}</div>
+    <div>{{ message }}</div>
+    <div>{{ emessage }}</div>
 
     <form class="signupForm__input" v-if="mode == 'login'">
       <label for="login-email">Email :</label>
@@ -42,7 +42,7 @@
         placeholder="Mot de passe"
         required
       />
-      <div class="error-message">{{ message }}</div>
+      <div>{{ message }}</div>
       <button @click.prevent="login()" class="button btn-red">
         <span> Connexion </span>
       </button>
@@ -84,9 +84,9 @@
         required
       />
 
-      <div class="error-message">{{ message }}</div>
+      <div>{{ message }}</div>
 
-      <div class="error-message">{{ emessage }}</div>
+      <div>{{ emessage }}</div>
 
       <button @click.prevent="signup()" class="button btn-orange" type="submit">
         <span>S'inscrire</span>
@@ -199,6 +199,12 @@ export default {
   background-color: #fff;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   border-radius: 40px;
+  @include phone{
+    @include phone-size
+  }
+  @include tablet{
+    @include tablet-size
+  }
   &__connect {
       margin-top: 20px;
     &__subtitle {

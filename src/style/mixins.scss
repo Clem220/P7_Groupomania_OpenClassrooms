@@ -1,10 +1,11 @@
+//ombrage
 @mixin boxShadow {
     background-color: #fff;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
     border-radius: 40px;
   }
 
-
+// button
 @mixin button {
   .button {
     width: 300px;
@@ -16,6 +17,7 @@
     font-family: "Lato", sans-serif;
     font-weight: 500;
     background: transparent;
+    z-index: 0;
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
@@ -175,4 +177,33 @@
 .btn-orange span:hover:after {
   width: 100%;
 }
+}
+
+// mediaquerries
+
+@mixin phone {
+  @media (max-width: 600px){
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width:601px) and (max-width: 768px){
+    @content;
+  }
+}
+
+@mixin phone-size {
+  width: 340px
+}
+@mixin tablet-size {
+  width: 550px
+}
+
+@mixin nav-phone {
+  background-image: url(@/assets/icon.png);
+}
+
+@mixin nav-tablet-desktop {
+  background-image: url(@/assets/icon-left-font.png);
 }

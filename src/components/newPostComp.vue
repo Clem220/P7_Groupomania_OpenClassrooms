@@ -171,6 +171,16 @@ section {
   display: flex;
   justify-content: center;
 }
+textarea{
+  @include phone {
+    max-width: 300px;
+    max-height: 90px;
+  }
+  @include tablet {
+    max-width: 440px;
+    max-height: 100px;
+  }
+}
 .newPost {
   display: flex;
   flex-direction: column;
@@ -181,10 +191,18 @@ section {
   background-color: #fff;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   border-radius: 40px;
+  @include phone {
+    @include phone-size
+  }
+  @include tablet{
+    @include tablet-size
+  }
   &-title{
     margin: 20px;
   }
   &__content {
+    display: flex;
+    flex-direction: column;
     &__text {
       width: 620px;
       height: 100px;

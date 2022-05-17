@@ -1,6 +1,6 @@
 <template>
   <div class="profilContent">
-    <div v-if="mode == 'profil'">
+    <div v-if="mode === 'profil'">
       <div class="profilInfo">
         <div class="profilInfo__img">
           <img src="@/assets/image-attractive.jpeg" alt="photo de profil" />
@@ -11,15 +11,16 @@
         </div>
       </div>
     </div>
-    <div class="profilModif" v-if="mode == 'profilModif'">
+    <div class="profilModif" v-if="mode === 'profilModif'">
       <form>
-        <label class="change" for="user-email">Email:</label><br />
+        <label  for="user-email">Email:</label><br />
         <input id="user-email" v-model="user.email" />
       </form>
       <div class="btnContent">
         <button
           class="button btn-orange width"
-          @click.prevent="modifyProfil(user)"
+          @click.prevent="modifyProfil(user) "
+          @click="switchToProfil()"
         >
           <span> Enregistrer les modifications </span>
         </button>
@@ -87,7 +88,7 @@ export default {
           console.log(response);
           this.email = response.email;
         }, window.alert("modification effectué"))
-        .catch((err) => console.log(err));
+         .catch((err) => console.log(err));
     },
 
     deleteUser() {
@@ -129,6 +130,7 @@ export default {
   width: 910px;
   height: 185px;
   margin-top: 140px;
+  
 }
 .profilInfo {
   display: flex;

@@ -4,13 +4,11 @@
 </nav>
   <section >
     <signupComp />
-   <!-- <loginForm /> -->
   </section>
     <footerComp />
 </template>
 
 <script>
-//import loginForm from "@/components/loginComp.vue";
 import FooterComp from "@/components/footerComp.vue";
 import signupComp from "@/components/signUpComp.vue";
 
@@ -18,7 +16,6 @@ export default {
   name: "HomeView",
   components: {
     signupComp,
-    //loginForm,
     FooterComp,
   },
 
