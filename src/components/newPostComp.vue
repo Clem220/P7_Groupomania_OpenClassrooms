@@ -24,6 +24,7 @@
           <input
                type="file"
                ref="image"
+               id="image"
                accept="image/*"
                aria-label="Sélectionner un fichier"
                @change= "selectFile()"
@@ -106,7 +107,7 @@ export default {
      addPost() {
       const formData = new FormData();
       formData.append("image", this.image);
-      formData.append("imageURL", this.imageUrl);
+      formData.append("imageUrl", this.imageUrl);
       formData.append("userId", parseInt(sessionStorage.getItem("user")));
       formData.append("content", document.getElementById("content").value);
       console.log("test", formData.get("image"));
@@ -118,11 +119,13 @@ export default {
         axios
           .post("/api/auth/posts/post", formData, {
             headers: {
+             
               Authorization: "Bearer " + sessionStorage.token,
             },
           })
           .then(() => {
-           this.$emit("postResponse");
+            alert("coucou")
+           // this.$emit("postResponse");
             console.log(this.$emit("postResponse"));
           })
           .catch((error) => (this.msgError = error));
@@ -130,7 +133,44 @@ export default {
         this.content = "";
       }
     }, 
-  }
+  
+     postMessage() {
+    if (this.content==''|| this.title=='') {
+        (this.message="Veuillez inscrire un sujet et un message")
+    }else{
+      axios
+        .post(
+          "/api/auth/posts/post",
+          { content: this.content, title: this.title, imageUrl: this.imageUrl  },
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.token,
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          this.content = "";
+          this.title = "";
+          this.image = this.$refs.image.files[0];
+          this.imageUrl = URL.createObjectURL(this.image);
+          const userId = sessionStorage.getItem("user");
+          axios
+            .get("/api/auth/posts/" + userId, {
+              headers: {
+                Authorization: "Bearer " + sessionStorage.token,
+              },
+            })
+            .then((response) => {
+              console.log(response);
+              this.posts = response.data;
+              this.message = "";
+            })
+            .catch((err) => console.log(err));
+        });
+    }
+  }, 
+    },
 }
 
 </script>
