@@ -36,7 +36,7 @@ export default {
 created() {
     const userId = sessionStorage.getItem("user");
     axios
-      .get("http://localhost:3000/api/users/" + userId, {
+      .get("/api/users/" + userId, {
         headers: {
           Authorization: "Bearer " + sessionStorage.token,
         },
@@ -52,23 +52,35 @@ created() {
 nav {
   display: flex;
   position: fixed;
+  flex-direction: row;
   top: 0px;
   justify-content: space-between;
-  flex-direction: row;
   background-color: #ffff;
   width: 100%;
   height: 100px;
   z-index: 1;
-
+  @include montserrat;
+@include phone {
+ flex-direction: column;
+ height: 105px;
+ align-items: center;
+}
 }
 img {
-  width: auto;
+  width: 480px;
   height: 100px;
+  @include phone {
+    width: 420px;
+    height: 70px
+  }
 }
 .navContent {
   display: flex;
   align-items: center;
   padding-right: 40px;
+  @include phone {
+    padding-right: 0px;
+  }
   span {
     padding-right: 15px;
   }

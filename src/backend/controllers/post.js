@@ -36,7 +36,7 @@ exports.createPost = (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.JWT_KEY);
     const userId = decodedToken.userId;
 
-if (!req.file) {
+if (!req.body.image) {
     return models.posts.create({
         userId: userId,
         content: req.body.content,
@@ -47,7 +47,7 @@ if (!req.file) {
         .catch((error) => {console.log(error)
              res.status(500).json(error)});
 
-    } else if (req.file) {
+    } else {
         models.posts.create({
             userId: userId,
             content: req.body.content,

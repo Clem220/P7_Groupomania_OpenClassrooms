@@ -3,12 +3,14 @@
     <article class="articleContent">
       <div class="articleContent__headers">
         <h6>{{ post.user.firstName }} {{ post.user.lastName }}</h6>
-        <span> {{ formatDate(post.createdAt) }} </span>
       </div>
       <div class="articleContent__post">
         <p class="articleContent__title">{{ post.title }}</p>
         <p class="articleContent__content">{{ post.content }}</p>
+        <img :src= "post.imageUrl" alt="">
       </div>
+      <div class="btn-content">
+        <span> {{ formatDate(post.createdAt) }} </span>
       <button
         class="button btn-red"
         v-if="post.userId === user.id || user.admin === true"
@@ -16,6 +18,7 @@
       >
         <span> Supprimer </span>
       </button>
+      </div>
     </article>
 
     <article class="commentContent">
@@ -23,16 +26,17 @@
         v-for="comment in comments"
         v-bind:key="comment.id"
         :comment="comment"
+        class="commentContent-align"
       >
         <div v-if="comment !== null" class="commentContent__commentaire">
+          <h6>{{ comment.user.firstName }} {{ comment.user.lastName }}</h6>
           <p class="commentaireContent">{{ comment.comment }}</p>
         </div>
 
         <div class="commentContent__footer">
-          <h6>{{ comment.user.firstName }} {{ comment.user.lastName }}</h6>
           <span class="date">{{ formatDate(comment.createdAt) }}</span>
           <button
-            class="button btn-red"
+            class="button btn-red btn-com"
             v-if="comment.userId === user.id || user.admin === true"
             @click.prevent="deleteCom(comment)"
           >
@@ -51,7 +55,7 @@
       <div class="comment__form__message">{{ message }}</div>
 
       <button
-        class="comment__form__btn button btn-orange"
+        class="comment__form__btn button btn-orange btn-com-width"
         @click.prevent="createCom(post)"
       >
         <span> Poster </span>
@@ -87,7 +91,7 @@ export default {
   created() {
     const userId = sessionStorage.getItem("user");
     axios
-      .get("http://localhost:3000/api/users/" + userId, {
+      .get("/api/users/" + userId, {
         headers: {
           Authorization: "Bearer " + sessionStorage.token,
         },
@@ -95,7 +99,7 @@ export default {
       .then((response) => (this.user = response.data))
       .catch((err) => console.log(err));
     axios
-      .get("http://localhost:3000/api/auth/comments/" + this.post.id, {
+      .get("/api/auth/comments/" + this.post.id, {
         headers: {
           Authorization: "Bearer " + sessionStorage.token,
         },
@@ -108,7 +112,6 @@ export default {
   methods: {
     formatDate(date) {
       return new Date(date).toLocaleDateString("fr-FR", {
-        weekday: "long",
         year: "numeric",
         month: "long",
         day: "numeric",
@@ -125,7 +128,7 @@ export default {
       } else {
         axios
           .post(
-            "http://localhost:3000/api/auth/comments/",
+            "/api/auth/comments/",
             { comment: this.comment, postId: post.id },
             {
               headers: {
@@ -136,7 +139,7 @@ export default {
           .then(() => {
             this.comment = "";
             axios
-              .get("http://localhost:3000/api/auth/comments/" + this.post.id, {
+              .get("/api/auth/comments/" + this.post.id, {
                 headers: {
                   Authorization: "Bearer " + sessionStorage.token,
                 },
@@ -152,14 +155,14 @@ export default {
     },
     deleteCom(comment) {
       axios
-        .delete("http://localhost:3000/api/auth/comments/" + comment.id, {
+        .delete("/api/auth/comments/" + comment.id, {
           headers: {
             Authorization: "Bearer " + sessionStorage.token,
           },
         })
         .then(() => {
           axios
-            .get("http://localhost:3000/api/auth/comments/" + this.post.id, {
+            .get("/api/auth/comments/" + this.post.id, {
               headers: {
                 Authorization: "Bearer " + sessionStorage.token,
               },
@@ -204,23 +207,38 @@ export default {
   }
 }
 
+.btn-content{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "Montserrat", sans-serif;
+    button{
+      width: 90px;
+    height: 30px;
+    line-height: 30px;
+    margin: 0px;
+    }
+}
+
 .articleContent {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   padding-bottom: 20px;
   border-bottom: 1px solid #c2c2c2;
+  margin: 0px 30px;
   &__headers {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
     border-bottom: 1px solid #c2c2c2;
-    margin: 0px 80px;
+    @include montserrat;
     h6 {
       padding-right: 40px;
     }
+  }
+  &__content{
+    @include courier-prime;
   }
   &__post {
     width: 70%;
@@ -230,41 +248,86 @@ export default {
 .commentContent {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   height: auto;
   min-width: 0px;
   max-height: 200px;
   overflow: scroll;
-  margin-top: 20px;
+  margin: 20px 30px 0px;
   padding-bottom: 10px;
   border-bottom: 1px solid #c2c2c2;
-  &__commentaire {
-    border-bottom: 1px solid #c2c2c2;
-    border-radius: 20px;
+  &-align{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
+  &__commentaire {
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    padding: 0px 15px;
+    @include courier-prime;
+    h6{
+      padding: 10px 10px;
+    margin: 5px 0px;
+ } 
+    p{
+      margin: 0;
+    }
+ }
   &__footer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    margin-top: 5px;
+    @include montserrat;
     h6 {
       padding-right: 20px;
     }
     span {
-      padding-right: 20px;
+      padding-right: 10px;
+      font-size: 12px;
+    }
+    .date{
+      padding: 10px 0px;
+      margin-right: 15px;
     }
   }
 }
-
+.commentaireContent{
+  width: auto;
+  padding: 5px 10px;
+  max-width: 400px;
+  word-wrap:break-word;
+}
 .comment__form {
-  margin-top: 20px;
+  margin: 10px 0px 10px 30px;
+  display: flex;
+  flex-direction: row;
   &__input {
     width: 300px;
     height: 35px;
     border-radius: 10px;
+    @include phone {
+      width: 260px;
+    }
   }
   &__btn {
     margin-bottom: 10px;
+    @include phone {
+      width: 150px;
+      
+    }
+  }
+}
+.btn-com {
+  margin-top: 0px;
+  width: 90px;
+    height: 30px;
+    line-height: 30px;
+  &-width{
+    width: 50px;
+    margin: 0px 0px 5px 20px;
   }
 }
 </style>

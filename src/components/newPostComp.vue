@@ -13,6 +13,7 @@
           />
           <textarea
             v-model="content"
+            id="content"
             class="newPost__content__text"
             name="message"
             placeholder="Quoi de neuf ?"
@@ -20,20 +21,27 @@
           />
           <div class="message">{{ message }}</div>
           <div id="preview">
-            <!-- <img
+          <input
+               type="file"
+               ref="image"
+               accept="image/*"
+               aria-label="Sélectionner un fichier"
+               @change= "selectFile()"
+             />
+            <img
                 v-if="imagePreview"
                 :src="imagePreview"
                 id="preview"
                 class="newPost__content__image"
                 alt="Prévisualisation de l'image ajoutée au message"
-              /> -->
+              /> 
           </div>
 
           <button
             type="submit"
-            class="button btn-orange"
+            class="button btn-orange width"
             aria-label="Publier le message"
-            @click="postMessage()"
+            @click.prevent="addPost()"
           >
           <span>
             Publier
@@ -67,7 +75,7 @@ export default {
   created() {
     const userId = sessionStorage.getItem("user");
     axios
-      .get("http://localhost:3000/api/users/" + userId, {
+      .get("/api/users/" + userId, {
         headers: {
           Authorization: "Bearer " + sessionStorage.token,
         },
@@ -76,7 +84,7 @@ export default {
       .catch((err) => console.log(err));
 
     axios
-      .get("http://localhost:3000/api/auth/posts/" + userId, {
+      .get("/api/auth/posts/" + userId, {
         headers: {
           Authorization: "Bearer " + sessionStorage.token,
         },
@@ -90,74 +98,39 @@ export default {
   methods: {
    selectFile() {
       this.image = this.$refs.image.files[0];
+      console.log(this.$refs.image)
       this.imageUrl = URL.createObjectURL(this.image);
       console.log( this.imageUrl)
     }, 
 
-   /*  async addPost() {
+     addPost() {
       const formData = new FormData();
       formData.append("image", this.image);
-      formData.append("userId", parseInt(localStorage.getItem("userId")));
+      formData.append("imageURL", this.imageUrl);
+      formData.append("userId", parseInt(sessionStorage.getItem("user")));
       formData.append("content", document.getElementById("content").value);
       console.log("test", formData.get("image"));
       console.log("test", formData.get("content"));
+      console.log("test", formData.get("imageUrl"))
       if (formData.get("content") == "") {
         this.error = "Message vide";
       } else {
-        await axios
-          .post("http://localhost:3000/auth/posts/post", formData, {
+        axios
+          .post("/api/auth/posts/post", formData, {
             headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: "Bearer " + this.token,
+              Authorization: "Bearer " + sessionStorage.token,
             },
           })
           .then(() => {
-            this.$emit("postResponse");
+           this.$emit("postResponse");
             console.log(this.$emit("postResponse"));
           })
           .catch((error) => (this.msgError = error));
         this.image = "";
         this.content = "";
       }
-    }, */
-  
-     postMessage() {
-    if (this.content==''|| this.title=='') {
-        (this.message="Veuillez inscrire un sujet et un message")
-    }else{
-      axios
-        .post(
-          "http://localhost:3000/api/auth/posts/post",
-          { content: this.content, title: this.title, imageUrl: this.imageUrl  },
-          {
-            headers: {
-              Authorization: "Bearer " + sessionStorage.token,
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response);
-          this.content = "";
-          this.title = "";
-          this.image = this.$refs.image.files[0];
-          this.imageUrl = URL.createObjectURL(this.image);
-          const userId = sessionStorage.getItem("user");
-          axios
-            .get("http://localhost:3000/api/auth/posts/" + userId, {
-              headers: {
-                Authorization: "Bearer " + sessionStorage.token,
-              },
-            })
-            .then((response) => {
-              console.log(response);
-              this.posts = response.data;
-              this.message = "";
-            })
-            .catch((err) => console.log(err));
-        });
-    }
-  }, 
-    },
+    }, 
+  }
 }
 
 </script>
@@ -167,16 +140,25 @@ export default {
 
 @include button;
 @include btn-orange;
+
+@include phone {
+  .width{
+  width: 150px;
+}
+}
+
 section {
   display: flex;
   justify-content: center;
 }
 textarea{
   @include phone {
+    min-width: 300px;
     max-width: 300px;
     max-height: 90px;
   }
   @include tablet {
+    min-width: 440px;
     max-width: 440px;
     max-height: 100px;
   }
@@ -199,6 +181,7 @@ textarea{
   }
   &-title{
     margin: 20px;
+    @include montserrat;
   }
   &__content {
     display: flex;
@@ -206,6 +189,7 @@ textarea{
     &__text {
       width: 620px;
       height: 100px;
+      @include courier-prime;
     }
   }
   &__option {

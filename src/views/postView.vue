@@ -34,7 +34,7 @@ export default {
   },
   created() {
     axios
-      .get("http://localhost:3000/api/users", {
+      .get("/api/users", {
         headers: {
           Authorization: "Bearer " + sessionStorage.token,
         },
@@ -42,7 +42,7 @@ export default {
       .then((response) => (this.users = response.data))
       .catch((err) => console.log(err));
     axios
-      .get("http://localhost:3000/api/auth/posts", {
+      .get("/api/auth/posts", {
         headers: {
           Authorization: "Bearer " + sessionStorage.token,
         },
@@ -55,7 +55,7 @@ export default {
   methods: {
     deletePost(item) {
       axios
-        .delete("http://localhost:3000/api/auth/posts/" + item.id, {
+        .delete("/api/auth/posts/" + item.id, {
           headers: {
             Authorization: "Bearer " + sessionStorage.getItem("token"),
           },

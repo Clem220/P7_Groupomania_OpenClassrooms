@@ -125,7 +125,7 @@ export default {
         );
       } else {
         axios
-          .post("http://localhost:3000/api/users/login", {
+          .post("/api/users/login", {
             email: this.email,
             password: this.password,
           })
@@ -156,7 +156,7 @@ export default {
         alert("Veuillez remplir tous les champs");
       } else {
         axios
-          .post("http://localhost:3000/api/users/signup", {
+          .post("/api/users/signup", {
             firstName: this.firstName,
             lastName: this.lastName,
             email: this.email,
@@ -199,6 +199,7 @@ export default {
   background-color: #fff;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   border-radius: 40px;
+  font-family: 'Montserrat', sans-serif;
   @include phone{
     @include phone-size
   }

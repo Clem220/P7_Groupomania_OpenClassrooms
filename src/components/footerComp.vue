@@ -12,21 +12,27 @@
 </template>
 
 <style lang="scss" scoped>
+@import '@/style/mixins';
+
 footer {
   display: flex;
   flex-direction: column;
+  align-items: center;
   position: fixed;
   bottom: 0px;
   width: 100%;
   height: 40px;
   background-color: #fff;
+  @include courier-prime;
   div {
     width: 100%;
+    display: flex;
     justify-content: space-around;
+    padding-top: 10px;
   }
   a {
     font-size: 10px;
-    color: grey;
+    color: black;
   }
 }
 </style>

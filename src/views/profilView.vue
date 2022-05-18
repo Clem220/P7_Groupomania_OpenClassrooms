@@ -45,7 +45,7 @@ export default {
   created() {
     const userId = sessionStorage.getItem("user");
     axios
-      .get("http://localhost:3000/api/users/" + userId, {
+      .get("/api/users/" + userId, {
         headers: {
           Authorization: "Bearer " + sessionStorage.token,
         },
@@ -54,7 +54,7 @@ export default {
       .catch((err) => console.log(err));
 
     axios
-      .get("http://localhost:3000/api/auth/posts/" + userId, {
+      .get("/api/auth/posts/" + userId, {
         headers: {
           Authorization: "Bearer " + sessionStorage.token,
         },
@@ -68,7 +68,7 @@ export default {
   methods: {
     deletePost(item) {
       axios
-        .delete("http://localhost:3000/api/auth/posts/" + item.id, {
+        .delete("/api/auth/posts/" + item.id, {
           headers: {
             Authorization: "Bearer " + sessionStorage.getItem("token"),
           },

@@ -56,7 +56,7 @@ export default {
   created() {
     const userId = sessionStorage.getItem("user");
     axios
-      .get("http://localhost:3000/api/users/" + userId, {
+      .get("/api/users/" + userId, {
         headers: {
           Authorization: "Bearer " + sessionStorage.token,
         },
@@ -74,7 +74,7 @@ export default {
     modifyProfil(user) {
       axios
         .put(
-          "http://localhost:3000/api/users/" + user.id,
+          "/api/users/" + user.id,
           {
             email: user.email,
           },
@@ -94,7 +94,7 @@ export default {
     deleteUser() {
       const userId = sessionStorage.getItem("user");
       axios
-        .delete("http://localhost:3000/api/users/" + userId, {
+        .delete("/api/users/" + userId, {
           headers: { Authorization: "Bearer " + localStorage.token },
         })
         .then((response) => console.log(response))

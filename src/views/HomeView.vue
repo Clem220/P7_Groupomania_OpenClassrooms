@@ -23,13 +23,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+@import '@/style/mixins';
 nav{
+  display: flex;
   justify-content: center;
   width: 100%;
   background-color: #fff;
   img{
-    width: 40%;
+    width: 60%;
     height: auto;
   }
 }
@@ -39,5 +40,8 @@ section {
   justify-content: center;
   width: 100%;
   margin-top: 75px;
+  @include phone {
+    margin-top: 0px;
+  }
 }
 </style>

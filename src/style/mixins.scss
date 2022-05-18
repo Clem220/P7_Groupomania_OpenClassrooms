@@ -1,10 +1,19 @@
+// import des polices
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime&family=Montserrat&display=swap');
+
 //ombrage
 @mixin boxShadow {
     background-color: #fff;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
     border-radius: 40px;
   }
-
+// font
+@mixin montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+@mixin courier-prime {
+  font-family: 'Courier Prime', monospace;
+}
 // button
 @mixin button {
   .button {
@@ -25,9 +34,9 @@
     box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
       7px 7px 20px 0px rgba(0, 0, 0, 0.1), 4px 4px 5px 0px rgba(0, 0, 0, 0.1);
     outline: none;
+    font-family: 'Montserrat', sans-serif;
   }
 }  
-
 @mixin btn-red {
   .btn-red {
     background: rgb(255, 27, 0);
@@ -103,7 +112,6 @@
   }
   
 }
-
 @mixin btn-orange {
 .btn-orange {
   background: linear-gradient(
@@ -178,32 +186,20 @@
   width: 100%;
 }
 }
-
 // mediaquerries
-
 @mixin phone {
   @media (max-width: 600px){
     @content;
   }
 }
-
 @mixin tablet {
   @media (min-width:601px) and (max-width: 768px){
     @content;
   }
 }
-
 @mixin phone-size {
   width: 340px
 }
 @mixin tablet-size {
   width: 550px
-}
-
-@mixin nav-phone {
-  background-image: url(@/assets/icon.png);
-}
-
-@mixin nav-tablet-desktop {
-  background-image: url(@/assets/icon-left-font.png);
 }

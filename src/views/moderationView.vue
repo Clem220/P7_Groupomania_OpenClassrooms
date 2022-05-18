@@ -36,7 +36,7 @@ export default {
   },
   created() {
     axios
-      .get("http://localhost:3000/api/users", {
+      .get("/api/users", {
         headers: {
           Authorization: "Bearer " + sessionStorage.token,
         },
@@ -64,6 +64,7 @@ export default {
  flex-wrap: wrap;
  justify-content: center;
 &__memberCard{
+  display: flex;
 flex-direction: column;
   align-items: center;
   background-color: #fff;
