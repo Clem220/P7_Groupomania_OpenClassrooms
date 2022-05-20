@@ -3,7 +3,7 @@
     <div v-if="mode === 'profil'">
       <div class="profilInfo">
         <div class="profilInfo__img">
-          <img src="@/assets/image-attractive.jpeg" alt="photo de profil" />
+          <img :src= "user.imageUrl" :alt="post.title">
         </div>
         <h2 class="profilName">{{ user.firstName }} {{ user.lastName }}</h2>
         <div class="profilModifier" @click="switchToProfilModif()">
@@ -13,16 +13,35 @@
     </div>
     <div class="profilModif" v-if="mode === 'profilModif'">
       <form>
-        <label  for="user-email">Email:</label><br />
+        <label for="user-email">Email:</label><br />
         <input id="user-email" v-model="user.email" />
+        <label class="text-center label" for="image"
+          ><strong>Choisir ma photo de profil</strong></label
+        >
+        <input
+          type="file"
+          class="form-control"
+          name="image"
+          id="image"
+          accept="image/*"
+          ref="image"
+          @change="filePictureToUpload()"
+        />
       </form>
       <div class="btnContent">
         <button
           class="button btn-orange width"
-          @click.prevent="modifyProfil(user) "
+          @click.prevent="modifyProfilEmail(user)"
           @click="switchToProfil()"
         >
-          <span> Enregistrer les modifications </span>
+          <span> Enregistrer le email </span>
+        </button>
+        <button
+          class="button btn-orange width"
+          @click.prevent="modifyProfilImg(user)"
+          @click="switchToProfil()"
+        >
+          <span> Enregistrer les img</span>
         </button>
         <button class="button btn-red width" @click.prevent="deleteUser()">
           <span> Supprimer compte </span>
@@ -40,17 +59,17 @@ export default {
 
   data() {
     return {
-      email: "",
       mode: "profil",
       user: [],
-      posts: [],
-      users: [],
       content: "",
       post: [],
       comment: [],
       createdAt: "",
       title: "",
       message: "",
+      image:"",
+      imageUrl: "",
+      email: ""
     };
   },
   created() {
@@ -71,13 +90,20 @@ export default {
     switchToProfilModif: function () {
       this.mode = "profilModif";
     },
-    modifyProfil(user) {
+
+    filePictureToUpload() {
+      this.image = this.$refs.image.files[0];
+      this.imageUrl = URL.createObjectURL(this.image);
+      console.log(this.imageUrl)
+    },
+
+    modifyProfilEmail(user) {
+       const formData = new FormData();
+      formData.append("email", user.email);
       axios
         .put(
-          "/api/users/" + user.id,
-          {
-            email: user.email,
-          },
+          "/api/users/" + user.id + '/email', formData
+          ,console.log(formData),
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.token,
@@ -88,7 +114,29 @@ export default {
           console.log(response);
           this.email = response.email;
         }, window.alert("modification effectué"))
-         .catch((err) => console.log(err));
+      //  window.location.reload()
+        .catch((err) => console.log(err));
+    },
+
+ modifyProfilImg(user) {
+       const formData = new FormData();
+      formData.append("image", this.image);
+      formData.append("imageUrl", this.imageUrl);
+      axios
+        .put(
+          "/api/users/" + user.id + '/photo', formData
+          ,console.log(formData),
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.token,
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+        }, window.alert("modification effectué"))
+      //  window.location.reload()
+        .catch((err) => console.log(err));
     },
 
     deleteUser() {
@@ -130,7 +178,6 @@ export default {
   width: 910px;
   height: 185px;
   margin-top: 140px;
-  
 }
 .profilInfo {
   display: flex;
@@ -143,6 +190,7 @@ export default {
       width: 150px;
       height: 150px;
       border-radius: 75px;
+      object-fit: cover;
     }
   }
 }

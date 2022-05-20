@@ -35,16 +35,13 @@ exports.createPost = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, process.env.JWT_KEY);
     const userId = decodedToken.userId;
-console.log(`${req.protocol}://${req.get("host")}/image/${
-    req.file.filename
-}`)
 if (!req.file) {
     console.log("je suis la")
     return models.posts.create({
         userId: userId,
         content: req.body.content,
         title: req.body.title,
-        imageUrl: "",
+        imageUrl: null,
     })
         .then((post) => res.status(201).json(post))
         .catch((error) => {console.log(error)
@@ -62,7 +59,7 @@ if (!req.file) {
         })
             .then((post) => res.status(201).json({post}))
             .catch((error) => res.status(500).json(error));
-    }
+    } 
 };
 
 

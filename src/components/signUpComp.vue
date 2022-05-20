@@ -84,6 +84,15 @@
         required
       />
 
+      <input
+            type="file"
+            ref="image"
+            id="image"
+            accept="image/*"
+            aria-label="Sélectionner un fichier"
+            @change="selectFile()"
+          />
+
       <div>{{ message }}</div>
 
       <div>{{ emessage }}</div>
@@ -107,6 +116,8 @@ export default {
       lastName: "",
       email: "",
       password: "",
+      image:"",
+      imageUrl: "",
       message: "",
       emessage: "",
     };
@@ -117,6 +128,12 @@ export default {
     },
     switchToLogin: function () {
       this.mode = "login";
+    },
+    selectFile() {
+      this.image = this.$refs.image.files[0];
+      console.log(this.$refs.image);
+      this.imageUrl = URL.createObjectURL(this.image);
+      console.log(this.imageUrl);
     },
     login() {
       if (this.email == "" || this.password == "") {
@@ -146,12 +163,43 @@ export default {
           });
       }
     },
-    signup() {
+signup() {
+      const formData = new FormData();
+      formData.append("image", this.image);
+      formData.append("imageUrl", this.imageUrl);
+      formData.append("email", this.email);
+      formData.append("password", this.password);
+      formData.append("firstName", this.firstName);
+      formData.append("lastName", this.lastName);
+      if (formData.get("lastName","firstName","password","email") == "") {
+        this.error = "Veuillez remplir tout les champs";
+      } else {
+        axios
+          .post("/api/users/signup", formData, {
+          })
+          .then(() => {
+            alert("coucou");
+            let responseAdmin = response.data.admin;
+            let responseUser = response.data.userId;
+            sessionStorage.setItem("admin", JSON.stringify(responseAdmin));
+            let responseToken = response.data.token;
+            sessionStorage.setItem("user", JSON.stringify(responseUser)); //push de l'id dans la sessionStorage
+            sessionStorage.setItem("token", responseToken);
+            this.$router.push("/postView");
+          })
+          .catch((error) => (this.msgError = error));
+        this.image = "";
+      }
+    },
+  },
+
+   /* signup2() {
       if (
         this.firstName == "" ||
         this.password == "" ||
         this.email == "" ||
-        this.lastName == ""
+        this.lastName == "" ||
+        this.imageUrl == ""
       ) {
         alert("Veuillez remplir tous les champs");
       } else {
@@ -161,6 +209,8 @@ export default {
             lastName: this.lastName,
             email: this.email,
             password: this.password,
+            imageUrl: this.imageUrl,
+            
           })
           .then((response) => {
             let responseAdmin = response.data.admin;
@@ -178,9 +228,8 @@ export default {
             }
           });
       }
-    },
-  },
-};
+    }, */
+  }
 </script>
 
 <style lang="scss" scoped>

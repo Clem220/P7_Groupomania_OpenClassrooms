@@ -5,9 +5,9 @@
         <h6>{{ post.user.firstName }} {{ post.user.lastName }}</h6>
       </div>
       <div class="articleContent__post">
-        <p class="articleContent__title">{{ post.title }}</p>
+      <!--  <p class="articleContent__title">{{ post.title }}</p> -->
         <p class="articleContent__content">{{ post.content }}</p>
-        <img :src= "post.imageUrl" alt="">
+        <img v-if="post.imageUrl!=null" :src= "post.imageUrl" :alt="post.title">
       </div>
       <div class="btn-content">
         <span> {{ formatDate(post.createdAt) }} </span>
@@ -241,7 +241,11 @@ export default {
     @include courier-prime;
   }
   &__post {
-    width: 70%;
+    width: 100%;
+    img{
+      width: 100%;
+      height: auto;
+    }
   }
 }
 
@@ -268,7 +272,7 @@ export default {
     @include courier-prime;
     h6{
       padding: 10px 10px;
-    margin: 5px 0px;
+      margin: 5px 0px;
  } 
     p{
       margin: 0;
@@ -309,14 +313,13 @@ export default {
     height: 35px;
     border-radius: 10px;
     @include phone {
-      width: 260px;
+      width: 200px;
     }
   }
   &__btn {
     margin-bottom: 10px;
     @include phone {
       width: 150px;
-      
     }
   }
 }

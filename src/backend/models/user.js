@@ -18,6 +18,10 @@ module.exports = (sequelize, Sequelize) => sequelize.define("user", {
     type: DataTypes.STRING,
     allowNull: false
   },
+  imageUrl: {
+    type:DataTypes.STRING,
+    allowNull: false
+  },
   admin: {
     type: DataTypes.BOOLEAN,
     allowNull: false
