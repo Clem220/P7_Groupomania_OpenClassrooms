@@ -3,7 +3,7 @@
     <div v-if="mode === 'profil'">
       <div class="profilInfo">
         <div class="profilInfo__img">
-          <img :src= "user.imageUrl" :alt="post.title">
+          <img :src= "user.imageUrl" alt="photo de profil">
         <h2 class="profilName">{{ user.firstName }} {{ user.lastName }}</h2>
         </div>
         <div class="profilModifier" @click="switchToProfilModif()">

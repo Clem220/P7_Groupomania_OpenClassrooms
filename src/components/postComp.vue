@@ -47,7 +47,9 @@
       </div>
     </article>
     <form class="comment__form">
+      <label for="comment">Commentaire</label>
       <input
+        id="comment"
         class="comment__form__input"
         v-model="comment"
         placeholder="Ecrire un commentaire..."
@@ -285,6 +287,9 @@ export default {
  } 
     p{
       margin: 0;
+    }
+    label{
+      display: none;
     }
  }
   &__footer {

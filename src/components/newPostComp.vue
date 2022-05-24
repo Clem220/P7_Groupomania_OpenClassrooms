@@ -2,7 +2,7 @@
   <section class="contentForNewpost">
     <article class="newPost">
       <form class="newPost__content">
-        <label for="newPost-title">Titre</label>
+        <label for="title">Titre</label>
         <input
           class="newPost-title"
           v-model="title"
@@ -11,6 +11,7 @@
           placeholder="Titre de votre post..."
           required
         />
+        <label for="content">Votre publication</label>
         <textarea
           v-model="content"
           id="content"
@@ -196,6 +197,9 @@ textarea {
     display: flex;
     flex-direction: column;
     align-items: center;
+    label{
+      display: none;
+    }
     &__text {
       width: 620px;
       height: 100px;
