@@ -27,9 +27,9 @@ schema
   .oneOf(["Passw0rd", "Password123"]);
 
 exports.signup = (req, res, next) => {
- /* if (!req.file) {
+ if (!schema.validate(req.body.password)) {
     throw { error: " invalide !" }; 
-  }else { */
+  }else { 
     bcrypt
       .hash(req.body.password, 10)
       .then((hash) => {
@@ -56,7 +56,7 @@ exports.signup = (req, res, next) => {
       })
       .catch((error) => res.status(500).json({ error }));
   }
-//};
+};
 exports.login = (req, res, next) => {
   models.users
     .findOne({
@@ -112,7 +112,6 @@ exports.getAllUsers = (req, res, next) => {
     .catch((error) => res.status(400).json({ error }));
 };
 
-// ne fonctionne que si les deux param sont renseignés a voir 
 exports.updateUserEmail = (req, res, next) => {
   try {
     console.log(req.body.email)

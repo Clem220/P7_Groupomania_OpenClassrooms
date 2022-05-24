@@ -98,10 +98,11 @@ export default {
   height: 185px;
   margin-top: 140px;
   @include phone{
-    @include phone-size
+    @include phone-size;
+    height: auto;
   }
   @include tablet{
-    @include tablet-size
+    @include tablet-size;
   }
 }
 .profilInfo {

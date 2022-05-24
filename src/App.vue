@@ -4,7 +4,11 @@
 
 <style lang="scss">
 @import './style/styleSheet';
+@import './style/mixins';
 
+
+@include title;
+@include text;
 #app {
   flex-direction: column;
   font-family: Avenir, Helvetica, Arial, sans-serif;

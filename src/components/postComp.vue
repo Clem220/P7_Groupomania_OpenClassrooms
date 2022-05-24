@@ -2,7 +2,8 @@
   <section class="postContent">
     <article class="articleContent">
       <div class="articleContent__headers">
-        <h6>{{ post.user.firstName }} {{ post.user.lastName }}</h6>
+        <img class="articleContent__headers__img" :src= "post.user.imageUrl" alt="">
+        <h3>{{ post.user.firstName }} {{ post.user.lastName }}</h3>
       </div>
       <div class="articleContent__post">
       <!--  <p class="articleContent__title">{{ post.title }}</p> -->
@@ -29,7 +30,7 @@
         class="commentContent-align"
       >
         <div v-if="comment !== null" class="commentContent__commentaire">
-          <h6>{{ comment.user.firstName }} {{ comment.user.lastName }}</h6>
+          <h4>{{ comment.user.firstName }} {{ comment.user.lastName }}</h4>
           <p class="commentaireContent">{{ comment.comment }}</p>
         </div>
 
@@ -231,8 +232,16 @@ export default {
   &__headers {
     display: flex;
     flex-direction: row;
+    align-items: center;
     border-bottom: 1px solid #c2c2c2;
     @include montserrat;
+    &__img{
+      width: 75px;
+      height: 75px;
+      border-radius: 35px;
+      object-fit: cover;
+      margin: 20px 20px 10px 0px;
+    }
     h6 {
       padding-right: 40px;
     }

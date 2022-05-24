@@ -9,34 +9,35 @@ exports.deletePost = (req, res, next) => {
     // nous utilisons l'ID que nous recevons comme paramètre pour accéder au post correspondant dans la base de données 
             models.posts.findOne ({ 
                 where: { id: req.params.id }})          
-             /*   if (req.file) {
-                    const filename = posts.imageUrl.split('/images/')[1];
-                    fs.unlink(`images/${filename}`, () => {
-                        posts.destroy({
-                                where: {
-                                    id: req.params.id
-                                }
-                            })
-                            .then(() => res.status(200).json({
-                                message: 'le post est bien supprimé !'
-                            }))
-                            .catch(error => res.status(400).json({
-                                error
-                            }))
-                    })
-                }   else { */
+                .then(post => {
+                    if (req.file) {
+                        const filename = post.imageUrl.split('/image/')[1];
+                        fs.unlink(`image/${filename}`, () => {
+                            post.destroy({
+                                    where: {
+                                        id: req.params.id
+                                    }
+                                })
+                                .then(() => res.status(200).json({
+                                    message: 'le post est bien supprimé !'
+                                }))
+                                .catch(error => res.status(400).json({
+                                    error
+                                }))
+                        })
+               } else { 
                     models.posts.destroy({where:{id: req.params.id }})
                     .then(() => res.status(200).json({ message: 'post supprimé !'}))
                     .catch(error => res.status(400).json({ error }));
-               // }
-};
+                } 
+})
+}
 
 exports.createPost = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, process.env.JWT_KEY);
     const userId = decodedToken.userId;
 if (!req.file) {
-    console.log("je suis la")
     return models.posts.create({
         userId: userId,
         content: req.body.content,
@@ -48,7 +49,6 @@ if (!req.file) {
              res.status(500).json(error)});
 
     } else {
-        console.log("je suis ici")
         models.posts.create({
             userId: userId,
             content: req.body.content,

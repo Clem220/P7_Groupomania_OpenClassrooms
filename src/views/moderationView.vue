@@ -4,7 +4,7 @@
   <section class="content">
   <article class="content__memberCard" v-for="user in users" v-bind:key="user.id">
     <div class="content__memberCard__name">
-      <h6> Prénom: {{ user.firstName }} <br /> Nom: {{ user.lastName }} {{ user.id }}</h6>
+      <h3> Prénom: {{ user.firstName }} <br/> Nom: {{ user.lastName }} <br/> UserId: {{ user.id }}</h3>
     </div>
     <div class="content__memberCard__email">
       <span>
@@ -48,8 +48,18 @@ export default {
 
       .catch((err) => console.log(err));
   },
-  methods: {
-  },
+  deleteUser() {
+      const userId = sessionStorage.getItem("user");
+      axios
+        .delete("api/posts/" + userId)
+        .delete("/api/users/" + userId, {
+          headers: { Authorization: "Bearer " + localStorage.token },
+        })
+        .then((response) => console.log(response))
+        .catch((err) => console.log(err));
+      sessionStorage.clear();
+      this.$router.push("/");
+    },
 };
 </script>
 
@@ -58,6 +68,10 @@ export default {
 
 @include button;
 @include btn-red;
+
+h1{
+  margin-top: 150px;
+}
 .content{
   display: flex;
  flex-direction: row;

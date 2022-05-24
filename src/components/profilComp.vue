@@ -4,17 +4,27 @@
       <div class="profilInfo">
         <div class="profilInfo__img">
           <img :src= "user.imageUrl" :alt="post.title">
-        </div>
         <h2 class="profilName">{{ user.firstName }} {{ user.lastName }}</h2>
+        </div>
         <div class="profilModifier" @click="switchToProfilModif()">
           Modifier le profil
         </div>
       </div>
     </div>
     <div class="profilModif" v-if="mode === 'profilModif'">
-      <form>
-        <label for="user-email">Email:</label><br />
+        <form class="profilModif__content">
+       <div class="profilModif__email">
+        <label for="user-email"><strong>Modifier mon email: </strong></label>
         <input id="user-email" v-model="user.email" />
+        <button
+          class="button btn-orange width"
+          @click.prevent="modifyProfilEmail(user)"
+          @click="switchToProfil()"
+        >
+          <span> Enregistrer l'email</span>
+        </button>
+        </div>
+        <div class="profilModif__img">
         <label class="text-center label" for="image"
           ><strong>Choisir ma photo de profil</strong></label
         >
@@ -27,27 +37,19 @@
           ref="image"
           @change="filePictureToUpload()"
         />
-      </form>
-      <div class="btnContent">
-        <button
-          class="button btn-orange width"
-          @click.prevent="modifyProfilEmail(user)"
-          @click="switchToProfil()"
-        >
-          <span> Enregistrer le email </span>
-        </button>
         <button
           class="button btn-orange width"
           @click.prevent="modifyProfilImg(user)"
           @click="switchToProfil()"
         >
-          <span> Enregistrer les img</span>
+          <span> Enregistrer la photo de profil</span>
         </button>
+        </div>
+       </form>
         <button class="button btn-red width" @click.prevent="deleteUser()">
           <span> Supprimer compte </span>
         </button>
       </div>
-    </div>
   </div>
 </template>
 
@@ -135,7 +137,7 @@ export default {
         .then((response) => {
           console.log(response);
         }, window.alert("modification effectué"))
-      //  window.location.reload()
+        window.location.reload()
         .catch((err) => console.log(err));
     },
 
@@ -161,7 +163,11 @@ export default {
 @include btn-red;
 @include btn-orange;
 .width {
-  width: 200px;
+  width: 265px;
+  @include phone {
+    margin-top: 0px;
+    margin-bottom: 20px;
+  }
 }
 .btnContent {
   display: flex;
@@ -175,16 +181,22 @@ export default {
   background-color: #fff;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   border-radius: 40px;
-  width: 910px;
+  width: 90%;
   height: 185px;
   margin-top: 140px;
 }
 .profilInfo {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
+  @include phone{
+    flex-direction: column;
+  }
   &__img {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     padding: 15px;
     img {
       width: 150px;
@@ -199,11 +211,50 @@ export default {
   font-size: 30px;
 }
 .profilModifier {
-  padding: 145px 0px 20px 270px;
+  padding: 130px 25px 20px 0px;
+  @include phone {
+   padding: 0px;
+   padding-bottom: 20px;
+  }
+  @include tablet {
+    padding: 135px 0px 20px 20%;
+  }
 }
 
 .profilModif {
+  display: flex;
+  flex-direction: row;
   margin-top: 40px;
+  @include phone{
+   flex-direction: column;
+  }
+  &__content{
+    display: flex;
+    flex-direction: row;
+    @include phone{
+   flex-direction: column;
+  }
+  }
+  &__email{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 20px;
+    @include phone {
+      margin-left: 0px;
+      
+    }
+  }
+  &__img{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 20px;
+    @include phone {
+      margin-left: 0px;
+      
+    }
+  }
 }
 
 article {

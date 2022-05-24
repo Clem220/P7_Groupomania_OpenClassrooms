@@ -148,6 +148,8 @@ export default {
     margin: 15px;
     @include phone {
     width: 150px;
+    justify-content: center;
+    display: flex;
   }
 }
 
@@ -202,9 +204,13 @@ textarea {
     
   }
   &__button{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
     input{
       @include phone{
-          margin: 10px 17px 10px
+      margin: 10px 17px 10px;
     }
     }
   }

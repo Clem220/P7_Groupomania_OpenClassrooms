@@ -21,9 +21,6 @@
         <span> Se connecter</span>
       </button>
     </p>
-    <div>{{ message }}</div>
-    <div>{{ emessage }}</div>
-
     <form class="signupForm__input" v-if="mode == 'login'">
       <label for="login-email">Email :</label>
       <input
@@ -42,7 +39,7 @@
         placeholder="Mot de passe"
         required
       />
-      <div>{{ message }}</div>
+      <div class="message">{{ message }}</div>
       <button @click.prevent="login()" class="button btn-red">
         <span> Connexion </span>
       </button>
@@ -93,9 +90,7 @@
             @change="selectFile()"
           />
 
-      <div>{{ message }}</div>
-
-      <div>{{ emessage }}</div>
+      <div class="eMessage">{{ emessage }}</div>
 
       <button @click.prevent="signup()" class="button btn-orange" type="submit">
         <span>S'inscrire</span>
@@ -178,41 +173,6 @@ signup() {
           .post("/api/users/signup", formData, {
           })
           .then(() => {
-            alert("coucou");
-            let responseAdmin = response.data.admin;
-            let responseUser = response.data.userId;
-            sessionStorage.setItem("admin", JSON.stringify(responseAdmin));
-            let responseToken = response.data.token;
-            sessionStorage.setItem("user", JSON.stringify(responseUser)); //push de l'id dans la sessionStorage
-            sessionStorage.setItem("token", responseToken);
-            this.$router.push("/postView");
-          })
-          .catch((error) => (this.msgError = error));
-        this.image = "";
-      }
-    },
-  },
-
-   /* signup2() {
-      if (
-        this.firstName == "" ||
-        this.password == "" ||
-        this.email == "" ||
-        this.lastName == "" ||
-        this.imageUrl == ""
-      ) {
-        alert("Veuillez remplir tous les champs");
-      } else {
-        axios
-          .post("/api/users/signup", {
-            firstName: this.firstName,
-            lastName: this.lastName,
-            email: this.email,
-            password: this.password,
-            imageUrl: this.imageUrl,
-            
-          })
-          .then((response) => {
             let responseAdmin = response.data.admin;
             let responseUser = response.data.userId;
             sessionStorage.setItem("admin", JSON.stringify(responseAdmin));
@@ -223,13 +183,15 @@ signup() {
           })
           .catch(() => {
             {
-              this.emessage = `"Votre mot de passe doit contenir min 8 caractères"
-                              "1 maj et 2 chiffres"`;
-            }
-          });
+        
+        this.emessage =`"Votre mot de passe doit contenir min 8 caractères"
+                              "1 maj et 2 chiffres"` ;
       }
-    }, */
+    });
   }
+  }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -279,5 +241,11 @@ signup() {
       display: none;
     }
   }
+}
+.message {
+  color: red
+}
+.eMessage{
+  color: red;
 }
 </style>

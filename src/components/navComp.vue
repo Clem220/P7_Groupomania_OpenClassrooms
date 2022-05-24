@@ -70,8 +70,8 @@ img {
   width: 480px;
   height: 100px;
   @include phone {
-    width: 420px;
-    height: 70px
+    width: 360px;
+    height: auto;
   }
 }
 .navContent {

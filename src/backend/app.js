@@ -2,7 +2,6 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-//package qui est utilisé pour la gestion et la transformation des chemins de ‎‎fichiers‎
 const path = require('path');
 const rateLimit = require("express-rate-limit");
 //met les valeurs de donnée importante dans un fichier .env pour les cacher
