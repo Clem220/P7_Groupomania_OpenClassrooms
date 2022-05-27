@@ -9,7 +9,10 @@ require("dotenv").config();
 //configure de manière appropriée des en-têtes HTTP pour protéger de certaines vulnérabilités
 const helmet = require('helmet')
 const auth = require('./middleware/auth')
+//
 
+
+//
 helmet({
   crossOriginResourcePolicy: false,
 })
@@ -34,6 +37,13 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
+//
+
+const db = require("../backend/models");
+db.sequelize.sync({force:true}).then(() => {
+  console.log("drop and re-sync db.")
+});
+//
 const cors = require('cors')
 
 app.use(cors({ origin: ['/api'], }))

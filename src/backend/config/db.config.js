@@ -1,6 +1,9 @@
-const Sequelize = require('sequelize');
-const sequelize = new Sequelize(process.env.SQL_DATABASE_NAME,process.env.SQL_USER,process.env.SQL_PASSWORD, {
-    host: 'localhost',
+require('dotenv').config();
+module.exports = {
+    HOST: 'localhost',
+    USER: process.env.SQL_USER,
+    PASSWORD: process.env.SQL_PASSWORD,
+    DB: process.env.SQL_DATABASE_NAME,
     dialect: 'mysql',
     pool: {
       max: 5,
@@ -8,17 +11,4 @@ const sequelize = new Sequelize(process.env.SQL_DATABASE_NAME,process.env.SQL_US
       acquire: 30000,
       idle: 10000
     }
-  });
-  try {
-    sequelize.authenticate();
-    console.log('Connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
-  const db = {};
-
-  db.Sequelize = Sequelize;
-  db.sequelize = sequelize;
-
-
-module.exports = db;
+  };
