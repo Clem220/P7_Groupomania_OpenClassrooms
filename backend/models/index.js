@@ -12,12 +12,16 @@ const connection = mysql.createConnection({
   user: process.env.DB_USERNAME,
   password: `${process.env.DB_PASSWORD}`
 });
-connection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME} CHARACTER SET 'utf8'`,
+connection.query(`CREATE DATABASE ${process.env.DB_NAME} `,
 function(err,results) {
   console.log(results);
   console.log(err);
 });
-
+connection.query(`Use ${process.env.DB_NAME}`,
+function(err,results) {
+  console.log(results);
+  console.log(err);
+});
 
 
 
