@@ -1,9 +1,9 @@
 <template>
   <div class="profilContent">
     <div v-if="mode === 'profil'">
-      <div class="profilInfo">
-        <div class="profilInfo__img">
-          <img :src= "user.imageUrl" alt="photo de profil">
+      <div class="profilInfo" v-bind="user">
+        <div class="profilInfo">
+          <img class="profilInfo__img" :src= "user.imageUrl" alt="photo de profil">
         <h2 class="profilName">{{ user.firstName }} {{ user.lastName }}</h2>
         </div>
         <div class="profilModifier" @click="switchToProfilModif()">
@@ -39,7 +39,7 @@
         />
         <button
           class="button btn-orange width"
-          @click.prevent="modifyProfilImg(user)"
+          @click.prevent="updatePicture()"
           @click="switchToProfil()"
         >
           <span> Enregistrer la photo de profil</span>
@@ -61,29 +61,33 @@ export default {
 
   data() {
     return {
-      mode: "profil",
-      user: [],
-      content: "",
-      post: [],
-      comment: [],
-      createdAt: "",
-      title: "",
-      message: "",
-      image:"",
-      imageUrl: "",
-      email: ""
+      user: {
+        id: localStorage.getItem("userId"),
+        isAdmin: localStorage.getItem("isAdmin"),
+        firtName: "",
+        lastName: "",
+        email: "",
+        imageUrl: "",
+      },
+      token: localStorage.getItem("token"),
+      userId: localStorage.getItem("userId"),
+      image: "",
+      mode: "profil"
     };
   },
-  created() {
-    const userId = sessionStorage.getItem("user");
-    axios
-      .get("/api/users/" + userId, {
+  async created() {
+    await axios
+      .get(`http://localhost:3000/api/users/${this.userId}`, {
         headers: {
-          Authorization: "Bearer " + sessionStorage.token,
+          Authorization: "Bearer " + this.token,
+          "Content-Type": "application/json",
         },
       })
-      .then((response) => (this.user = response.data))
-      .catch((err) => console.log(err));
+      .then((response) => {
+        this.user = response.data.user;
+        console.log(this.user);
+        this.image = response.data.image;
+      });
   },
   methods: {
     switchToProfil: function () {
@@ -92,65 +96,48 @@ export default {
     switchToProfilModif: function () {
       this.mode = "profilModif";
     },
-
     filePictureToUpload() {
       this.image = this.$refs.image.files[0];
       this.imageUrl = URL.createObjectURL(this.image);
-      console.log(this.imageUrl)
     },
-
-    modifyProfilEmail(user) {
-       const formData = new FormData();
-      formData.append("email", user.email);
-      axios
-        .put(
-          "/api/users/" + user.id + '/email', formData
-          ,console.log(formData),
-          {
-            headers: {
-              Authorization: "Bearer " + sessionStorage.token,
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response);
-          this.email = response.email;
-        }, window.alert("modification effectué"))
-      //  window.location.reload()
-        .catch((err) => console.log(err));
-    },
-
- modifyProfilImg(user) {
-       const formData = new FormData();
+    async updatePicture() {
+      const formData = new FormData();
+      formData.append("userId", parseInt(localStorage.getItem("userId")));
       formData.append("image", this.image);
       formData.append("imageUrl", this.imageUrl);
-      axios
-        .put(
-          "/api/users/" + user.id + '/photo', formData
-          ,console.log(formData),
-          {
-            headers: {
-              Authorization: "Bearer " + sessionStorage.token,
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response);
-        }, window.alert("modification effectué"))
-        window.location.reload()
-        .catch((err) => console.log(err));
-    },
-
-    deleteUser() {
-      const userId = sessionStorage.getItem("user");
-      axios
-        .delete("/api/users/" + userId, {
-          headers: { Authorization: "Bearer " + localStorage.token },
+      console.log(this.image);
+      console.log(this.imageUrl);
+      console.log("test-récup", formData.get("imageUrl"));
+      await axios
+        .put(`http://localhost:3000/api/users/${this.userId}`, formData, {
+          headers: {
+            Authorization: "Bearer " + this.token,
+            "Content-Type": "multipart/form-data",
+          },
         })
-        .then((response) => console.log(response))
-        .catch((err) => console.log(err));
-      sessionStorage.clear();
-      this.$router.push("/");
+        .then((response) => {
+          this.user = response.data.user;
+          this.image = response.data.image;
+        });
+    },
+    async deleteMyAccount(id) {
+      let confirmDeleteUser = confirm(
+        " la suppresion du compte est irréversible, voulez-vous vraiment supprimer le compte ?"
+      );
+      if (confirmDeleteUser == true) {
+        await axios
+          .delete(`/api/users/${id}`, {
+            headers: {
+              Authorization: "Bearer " + this.token,
+            },
+          })
+          .then(() => {
+            localStorage.clear();
+            this.$router.push("/");
+          });
+      } else {
+        return;
+      }
     },
   },
 };
@@ -198,12 +185,10 @@ export default {
     flex-direction: row;
     align-items: center;
     padding: 15px;
-    img {
-      width: 150px;
+    width: 150px;
       height: 150px;
       border-radius: 75px;
       object-fit: cover;
-    }
   }
 }
 .profilName {

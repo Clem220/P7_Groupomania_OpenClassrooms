@@ -24,7 +24,7 @@
     <form class="signupForm__input" v-if="mode == 'login'">
       <label for="login-email">Email :</label>
       <input
-        v-model="email"
+        v-model="dataLogin.email"
         id="login-email"
         type="text"
         placeholder="Email"
@@ -33,7 +33,7 @@
 
       <label for="login-password">Mot de passe :</label>
       <input
-        v-model="password"
+        v-model="dataLogin.password"
         id="login-password"
         type="password"
         placeholder="Mot de passe"
@@ -48,7 +48,7 @@
       <label for="signup-nom">Nom :</label>
       <input
         v-model="lastName"
-        id="signup-nom"
+        id="lastName"
         type="text"
         placeholder="Nom"
         required
@@ -57,7 +57,7 @@
       <label for="signup-prenom">Prenom :</label>
       <input
         v-model="firstName"
-        id="signup-prenom"
+        id="firstName"
         type="text"
         placeholder="Prenom"
         required
@@ -66,7 +66,7 @@
       <label for="signup-password">Mot de passe :</label>
       <input
         v-model="password"
-        id="signup-password"
+        id="password"
         type="password"
         placeholder="Mot de passe"
         required
@@ -75,7 +75,7 @@
       <label for="signup-email">Email :</label>
       <input
         v-model="email"
-        id="signup-email"
+        id="email"
         type="email"
         placeholder="Email"
         required
@@ -115,6 +115,10 @@ export default {
       imageUrl: "",
       message: "",
       emessage: "",
+       dataLogin: {
+        email: "",
+        password: "",
+      },
     };
   },
   methods: {
@@ -131,65 +135,49 @@ export default {
       console.log(this.imageUrl);
     },
     login() {
-      if (this.email == "" || this.password == "") {
+      if (this.dataLogin.email == "" || this.dataLogin.password == "") {
         alert(
           "Veuillez entrer votre email et votre mot de passe pour vous connecter"
         );
       } else {
         axios
-          .post("/api/users/login", {
-            email: this.email,
-            password: this.password,
-          })
-          .then((response) => {
-            let responseUser = response.data.userId;
-            let responseAdmin = response.data.admin;
-            sessionStorage.setItem("admin", JSON.stringify(responseAdmin));
-            let responseToken = response.data.token;
-            sessionStorage.setItem("user", JSON.stringify(responseUser)); //push de l'id dans la sessionStorage
-            sessionStorage.setItem("token", responseToken);
-            console.log(this.$router);
-            this.$router.push("/postView");
-          })
-          .catch(() => {
-            {
-              this.message = "utilisateur non trouvé";
-            }
-          });
+        .post("/api/auth/login", this.dataLogin)
+        .then((response) => {
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("userId", response.data.userId);
+          localStorage.setItem("isAdmin", response.data.isAdmin);
+          this.$router.push("/postView");
+        })
+        .catch(() => (this.error = "email/password invalide !"));
       }
     },
 signup() {
-      const formData = new FormData();
-      formData.append("image", this.image);
-      formData.append("imageUrl", this.imageUrl);
-      formData.append("email", this.email);
-      formData.append("password", this.password);
-      formData.append("firstName", this.firstName);
-      formData.append("lastName", this.lastName);
-      if (formData.get("lastName","firstName","password","email") == "") {
-        this.error = "Veuillez remplir tout les champs";
-      } else {
+if (
+        this.firstName !== "" ||
+        this.lastName !== "" ||
+        this.email !== "" ||
+        this.password !== ""
+      )
+      console.log(this.imageUrl),
         axios
-          .post("/api/users/signup", formData, {
+          .post("/api/auth/signup", {
+            firstName: document.getElementById("firstName").value,
+            lastName: document.getElementById("lastName").value,
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+            image: document.getElementById("image").value,
+            imageUrl: this.imageUrl
           })
-          .then(() => {
-            let responseAdmin = response.data.admin;
-            let responseUser = response.data.userId;
-            sessionStorage.setItem("admin", JSON.stringify(responseAdmin));
-            let responseToken = response.data.token;
-            sessionStorage.setItem("user", JSON.stringify(responseUser)); //push de l'id dans la sessionStorage
-            sessionStorage.setItem("token", responseToken);
+          .then((response) => {
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("userId", response.data.userId);
+            localStorage.setItem("isAdmin", response.data.isAdmin);
             this.$router.push("/postView");
           })
-          .catch(() => {
-            {
-        
-        this.emessage =`"Votre mot de passe doit contenir min 8 caractères"
-                              "1 maj et 2 chiffres"` ;
-      }
-    });
-  }
-  }
+          .catch(
+            () => (this.error = "Veuillez remplir correctement les champs !")
+          );
+    },
   }
 }
 </script>

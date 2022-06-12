@@ -3,14 +3,6 @@
     <article class="newPost">
       <form class="newPost__content">
         <label for="title">Titre</label>
-        <input
-          class="newPost-title"
-          v-model="title"
-          id="title"
-          type="text"
-          placeholder="Titre de votre post..."
-          required
-        />
         <label for="content">Votre publication</label>
         <textarea
           v-model="content"
@@ -40,7 +32,6 @@
         </button>
         </span>
         </div>
-        <div class="message">{{ message }}</div>
         <div id="preview" class="newPost__preview">
           <img
             v-if="image"
@@ -61,73 +52,41 @@ import axios from "axios";
 export default {
   name: "newPostComp",
 
-  data() {
+   data() {
     return {
-      user: [],
-      posts: [],
-      users: [],
-      content: "",
-      post: [],
-      title: "",
-      message: "",
+      token: localStorage.getItem("token"),
+      userId: localStorage.getItem("userId"),
       image: "",
+      content: "",
       imageUrl: "",
+      error: "",
     };
-  },
-  created() {
-    const userId = sessionStorage.getItem("user");
-    axios
-      .get("/api/users/" + userId, {
-        headers: {
-          Authorization: "Bearer " + sessionStorage.token,
-        },
-      })
-      .then((response) => (this.user = response.data))
-      .catch((err) => console.log(err));
-
-    axios
-      .get("/api/auth/posts/" + userId, {
-        headers: {
-          Authorization: "Bearer " + sessionStorage.token,
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        this.posts = response.data;
-      })
-      .catch((err) => console.log(err));
   },
   methods: {
     selectFile() {
       this.image = this.$refs.image.files[0];
-      console.log(this.$refs.image);
       this.imageUrl = URL.createObjectURL(this.image);
-      console.log(this.imageUrl);
     },
-
-    addPost() {
+    /*** Créer une nouvelle publication ***/
+    async addPost() {
       const formData = new FormData();
       formData.append("image", this.image);
-      formData.append("imageUrl", this.imageUrl);
-      formData.append("userId", parseInt(sessionStorage.getItem("user")));
+      formData.append("userId", parseInt(localStorage.getItem("userId")));
       formData.append("content", document.getElementById("content").value);
-      formData.append("title", this.title);
       console.log("test", formData.get("image"));
       console.log("test", formData.get("content"));
-      console.log("test", formData.get("imageUrl"));
       if (formData.get("content") == "") {
         this.error = "Message vide";
       } else {
-        axios
-          .post("/api/auth/posts/post", formData, {
+        await axios
+          .post("http://localhost:3000/api/posts", formData, {
             headers: {
-              Authorization: "Bearer " + sessionStorage.token,
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + this.token,
             },
           })
           .then(() => {
             this.$emit("postResponse");
-            console.log(this.$emit("postResponse"));
-            window.location.reload()
           })
           .catch((error) => (this.msgError = error));
         this.image = "";
@@ -197,6 +156,7 @@ textarea {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 25px;
     label{
       display: none;
     }

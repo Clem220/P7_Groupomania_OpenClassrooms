@@ -19,19 +19,19 @@
           class="articleContent__headers__img"
           alt="profile picture"
           title="picture profile"
-          
+          rel="preload"
         />
         <h3>{{ user.firstName }} {{ user.lastName }}</h3>
       </div>
       <div class="articleContent__post">
         <p class="articleContent__content">{{ post.content }}</p>
-        <img v-if="post.imageUrl != null" :src= "post.imageUrl" alt="image du post" >
+        <img v-if="post.imageUrl!=null" alt="photo du post" :src= "post.imageUrl" >
       </div>
      <div class="btn-content">
         <span> {{ formatDate(post.createdAt) }} </span> 
       <button
         class="button btn-red"
-        v-if="user.id == post.userId || isAdmin == 'true'"
+        v-if="user.id == post.userId"
         @click="deletePublication(post.id)"
       >
         <span> Supprimer </span>
@@ -68,21 +68,22 @@
         </div>
       </div>
     </article>
-   <createComment class="comment__form" v-bind="post"  @postCommentResponse="getComments()"/>
+    <createComment class="comment__form" v-bind="post"  @postCommentResponse="getComments()"/>
   </section>
 </template>
+
 <script>
 /* eslint-disable */
 import axios from "axios";
-import createComment from "@/components/createComment.vue"
+import createComment from "@/components/createComment.vue";
 import newPostComp from "@/components/newPostComp.vue";
 export default {
-  name: "post",
-  components: {
+    name: "userpostComp",
+    components: {
         createComment,
         newPostComp,
     },
-  data() {
+data() {
     return {
       userId: localStorage.getItem("userId"),
       token: localStorage.getItem("token"),
@@ -97,12 +98,12 @@ export default {
       posts: [],
       comment: {},
       comments: [],
-      isAdmin: localStorage.getItem("isAdmin")
     };
   },
+  
   async created() {
-    await axios
-      .get("http://localhost:3000/api/users", {
+ await axios
+      .get("/api/users", {
         headers: {
           Authorization: "Bearer " + this.token,
           "Content-Type": "application/json",
@@ -116,37 +117,37 @@ export default {
         alert(error);
         console.log(error);
       });
-    await axios
-      .get("http://localhost:3000/api/posts", {
+
+    const userId = sessionStorage.getItem("user");
+   
+  await  axios
+      .get(`/api/posts/${this.userId}`  , {
         headers: {
           Authorization: "Bearer " + this.token,
         },
       })
       .then((response) => {
         this.posts = response.data.posts;
-        console.log(this.posts);
+        console.log("hola",response);
       })
-      .catch(function(error) {
-        alert(error);
-        console.log(error);
-      }); 
-    await axios
-      .get("http://localhost:3000/api/comments", {
+      .catch((err) => console.log(err)); 
+
+   await  axios
+      .get("/api/comments", {
         headers: {
           Authorization: "Bearer " + this.token,
-          
+          "Content-Type": "application/json",
         },
       })
       .then((response) => {
         this.comments = response.data;
-        console.log(this.comments);
       })
       .catch(function(error) {
         console.log(error);
       });
   },
   methods: {
-    formatDate(date) {
+      formatDate(date) {
       return new Date(date).toLocaleDateString("fr-FR", {
         year: "numeric",
         month: "long",
@@ -155,13 +156,48 @@ export default {
         minute: "numeric",
       });
     },
-    async deletePublication(id) {
+    //
+    async getPosts() {
+      await axios
+        .get("http://localhost:3000/api/posts", {
+          headers: {
+            Authorization: "Bearer " + this.token,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          this.posts = response.data.posts;
+          console.log(this.posts);
+        })
+        .catch(function(error) {
+          alert(error);
+          console.log(error);
+        });
+    },
+    //
+     async getComments() {
+      await axios
+        .get("/api/comments", {
+          headers: {
+            Authorization: "Bearer " + this.token,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          this.comments = response.data;
+        })
+        .catch(function(error) {
+          alert(error);
+          console.log(error);
+        });
+    },
+     async deletePublication(id) {
       let confirmDeletePost = confirm(
         "voulez-vous vraiment supprimer votre publication ?"
       );
       if (confirmDeletePost == true) {
         await axios
-          .delete(`http://localhost:3000/api/posts/${id}`, {
+          .delete(`/api/posts/${id}`, {
             headers: {
               Authorization: "Bearer " + this.token,
             },
@@ -180,7 +216,7 @@ export default {
       );
       if (confirmDeleteComment == true) {
         await axios
-          .delete(`http://localhost:3000/api/comments/${id}`, {
+          .delete(`/api/comments/${id}`, {
             headers: {
               "Content-Type": "application/json",
               Authorization: "Bearer " + this.token,
@@ -194,42 +230,9 @@ export default {
         return;
       }
     },
-    async getPosts() {
-      await axios
-        .get("http://localhost:3000/api/posts", {
-          headers: {
-            Authorization: "Bearer " + this.token,
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          this.posts = response.data.posts;
-          console.log(this.posts);
-        })
-        .catch(function(error) {
-          alert(error);
-          console.log(error);
-        });
-    },
-    async getComments() {
-      await axios
-        .get("http://localhost:3000/api/comments", {
-          headers: {
-            Authorization: "Bearer " + this.token,
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          this.comments = response.data;
-          console.log(this.comments);
-        })
-        .catch(function(error) {
-          alert(error);
-          console.log(error);
-        });
-    },
-  },
+  }, 
 };
+
 </script>
 
 <style lang="scss" scoped>
@@ -240,7 +243,7 @@ export default {
 @include btn-orange;
 
 .newPost {
-  margin-top: 140px;
+  margin-top: 50px;
 }
 
 .postContent {
@@ -309,9 +312,9 @@ export default {
   &__post {
     width: 100%;
     img{
-      width: 100%;
-      max-width: 100%;
-      height: auto;
+      width: 620px;
+      height: 450px;
+      object-fit: content;
     }
   }
 }
@@ -368,7 +371,6 @@ export default {
     }
   }
 }
-
 .commentaireContent{
   width: auto;
   padding: 5px 10px;

@@ -1,11 +1,7 @@
 <template>
   <navComp />
   <profilComp />
-  <newPostComp />
-  <post-comp
-    v-for="post in posts"
-    v-bind:key="post.id"
-    :post="post"
+  <userPostComp
     @deletePostEvent="deletePost"
   />
   <footerComp />
@@ -14,8 +10,7 @@
 <script>
 import navComp from "@/components/navComp.vue";
 import profilComp from "@/components/profilComp.vue";
-import newPostComp from "@/components/newPostComp.vue";
-import PostComp from "@/components/postComp.vue";
+import userPostComp from "@/components/userPostComp";
 import footerComp from "@/components/footerComp.vue";
 
 import axios from "axios";
@@ -25,46 +20,49 @@ export default {
   components: {
     navComp,
     profilComp,
-    newPostComp,
-    PostComp,
+    userPostComp,
     footerComp,
   },
   data() {
     return {
-      user: [],
-      posts: [],
+      userId: localStorage.getItem("userId"),
+      token: localStorage.getItem("token"),
       users: [],
+      user: {
+        id: localStorage.getItem("userId"),
+        isAdmin: localStorage.getItem("isAdmin"),
+      },
+      postId: "",
       content: "",
-      post: [],
-      comment: [],
-      createdAt: "",
-      title: "",
-      message: "",
+      post: {},
+      posts: [],
+      comment: {},
+      comments: [],
     };
+
   },
-  created() {
-    const userId = sessionStorage.getItem("user");
-    axios
-      .get("/api/users/" + userId, {
+ async created() {
+    
+ await   axios
+      .get(`/api/users/${this.userId}` , {
         headers: {
           Authorization: "Bearer " + sessionStorage.token,
         },
       })
       .then((response) => (this.user = response.data))
       .catch((err) => console.log(err));
-
-    axios
-      .get("/api/auth/posts/" + userId, {
+   
+  await  axios
+      .get(`/api/posts/${this.userId}`  , {
         headers: {
           Authorization: "Bearer " + sessionStorage.token,
         },
       })
       .then((response) => {
-        console.log(response);
-        this.posts = response.data;
+        this.posts = response.data.posts;
       })
-      .catch((err) => console.log(err));
-  },
+      .catch((err) => console.log(err)); 
+  }, 
   methods: {
     deletePost(item) {
       axios

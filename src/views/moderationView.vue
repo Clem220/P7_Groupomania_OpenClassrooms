@@ -1,8 +1,8 @@
 <template>
   <navBar />
   <h1>Les membres de Groupomania</h1>
-  <section class="content">
-  <article class="content__memberCard" v-for="user in users" v-bind:key="user.id">
+  <section class="content" >
+  <article class="content__memberCard" v-for="user in users" :key="user.id">
     <div class="content__memberCard__name">
       <h3> Prénom: {{ user.firstName }} <br/> Nom: {{ user.lastName }} <br/> UserId: {{ user.id }}</h3>
     </div>
@@ -11,7 +11,7 @@
        Email: {{ user.email }}
       </span>
     </div>
-    <button class="content__memberCard__button button btn-red">
+    <button class="content__memberCard__button button btn-red" @click="deleteUser(user.id)">
       <span>
       Supprimer compte
       </span>
@@ -30,8 +30,13 @@ export default {
   },
   data() {
     return {
+      userId: localStorage.getItem("userId"),
+      token: localStorage.getItem("token"),
       users: [],
-      email: "",
+      user: {
+        id: localStorage.getItem("userId"),
+        isAdmin: localStorage.getItem("isAdmin"),
+      },
     };
   },
   created() {
@@ -43,23 +48,33 @@ export default {
       })
       .then((response) => {
         console.log(response);
-        this.users = response.data;
+        this.users = response.data.users;
       })
 
       .catch((err) => console.log(err));
   },
-  deleteUser() {
-      const userId = sessionStorage.getItem("user");
-      axios
-        .delete("api/posts/" + userId)
-        .delete("/api/users/" + userId, {
-          headers: { Authorization: "Bearer " + localStorage.token },
-        })
-        .then((response) => console.log(response))
-        .catch((err) => console.log(err));
-      sessionStorage.clear();
-      this.$router.push("/");
+  methods: {
+    async deleteUser(id) {
+      let confirmDeleteUser = confirm(
+        " la suppresion du compte est irréversible. voulez-vous vraiment supprimer le compte ?"
+      );
+      if (confirmDeleteUser == true) {
+        await axios
+          .delete(`/api/admin/delete/${id}`, {
+            headers: {
+              Authorization: "Bearer " + this.token,
+              "Content-Type": "application/json",
+            },
+          })
+          .then((response) => {
+            console.log(response.data);
+            location.reload();
+          });
+      } else {
+        return;
+      }
     },
+  },
 };
 </script>
 

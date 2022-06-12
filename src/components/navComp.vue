@@ -1,13 +1,13 @@
 <template>
   <nav>
     <router-link to="/postView" aria-label="accueil">
-      <img src="../assets/icon-left-font.png" alt="logo de Groupomania" />
+      <img src="../assets/icon-left-font.png" alt="logo de Groupomania" rel="preload" />
     </router-link>
     <div class="navContent">
-      <router-link to="/moderationView" v-if="user.admin === true">
+    <router-link to="/moderationView" v-if="isAdmin === 'true'">
         <span>Members</span>
       </router-link>
-      <router-link to="/profilView" aria-label="profil">
+      <router-link to="/profilView" aria-label="profil" >
         <span>Profil</span>
       </router-link>
       <router-link to="/" @click = logout()>
@@ -19,31 +19,30 @@
 
 <script>
 /* eslint-disable */
-import axios from 'axios';
+
 export default {
         name: 'navComp',
-        methods:{
-            logout(){
-                sessionStorage.clear();
-                this.$router.push('/')
-            }
-        }, 
         data() {
     return {
+      user: {
+        id: localStorage.getItem("userId"),
+        isAdmin: localStorage.getItem("isAdmin"),
+      },
       user: [],
+      users: [],
+      userId: localStorage.getItem("userId"),
+      isAdmin: localStorage.getItem("isAdmin"),
+      
     }  
 },
-created() {
-    const userId = sessionStorage.getItem("user");
-    axios
-      .get("/api/users/" + userId, {
-        headers: {
-          Authorization: "Bearer " + sessionStorage.token,
-        },
-      })
-      .then((response) => (this.user = response.data))
-      .catch((err) => console.log(err));
-  },
+
+ methods:{
+            logout(){
+                sessionStorage.clear();
+                localStorage.clear();
+                this.$router.push('/')
+            },
+        }, 
 }
 </script>
 
