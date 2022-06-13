@@ -3,8 +3,12 @@
     <div v-if="mode === 'profil'">
       <div class="profilInfo" v-bind="user">
         <div class="profilInfo">
-          <img class="profilInfo__img" :src= "user.imageUrl" alt="photo de profil">
-        <h2 class="profilName">{{ user.firstName }} {{ user.lastName }}</h2>
+          <img
+            class="profilInfo__img"
+            :src="user.imageUrl"
+            alt="photo de profil"
+          />
+          <h2 class="profilName">{{ user.firstName }} {{ user.lastName }}</h2>
         </div>
         <div class="profilModifier" @click="switchToProfilModif()">
           Modifier le profil
@@ -12,44 +16,34 @@
       </div>
     </div>
     <div class="profilModif" v-if="mode === 'profilModif'">
-        <form class="profilModif__content">
-       <div class="profilModif__email">
-        <label for="user-email"><strong>Modifier mon email: </strong></label>
-        <input id="user-email" v-model="user.email" />
-        <button
-          class="button btn-orange width"
-          @click.prevent="modifyProfilEmail(user)"
-          @click="switchToProfil()"
-        >
-          <span> Enregistrer l'email</span>
-        </button>
-        </div>
+      <form class="profilModif__content">
         <div class="profilModif__img">
-        <label class="text-center label" for="image"
-          ><strong>Choisir ma photo de profil</strong></label
-        >
-        <input
-          type="file"
-          class="form-control"
-          name="image"
-          id="image"
-          accept="image/*"
-          ref="image"
-          @change="filePictureToUpload()"
-        />
-        <button
-          class="button btn-orange width"
-          @click.prevent="updatePicture()"
-          @click="switchToProfil()"
-        >
-          <span> Enregistrer la photo de profil</span>
-        </button>
+          <label class="text-center label" for="image"
+            ><strong>Choisir ma photo de profil</strong></label
+          >
+          <input
+            type="file"
+            class="form-control"
+            name="image"
+            id="image"
+            accept="image/*"
+            ref="image"
+            @change="filePictureToUpload()"
+          />
+          <button
+            class="button btn-orange width"
+            @click.prevent="updatePicture()"
+            @click="switchToProfil()"
+          >
+            <span> Enregistrer la photo de profil</span>
+          </button>
         </div>
-       </form>
-        <button class="button btn-red width" @click.prevent="deleteUser()">
-          <span> Supprimer compte </span>
-        </button>
-      </div>
+      </form>
+      <button class="button btn-red width" @click.prevent="deleteUser()">
+        <span> Supprimer compte </span>
+      </button>
+    </div>
+    
   </div>
 </template>
 
@@ -72,7 +66,7 @@ export default {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
       image: "",
-      mode: "profil"
+      mode: "profil",
     };
   },
   async created() {
@@ -169,7 +163,7 @@ export default {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   border-radius: 40px;
   width: 90%;
-  height: 185px;
+  height: auto;
   margin-top: 140px;
 }
 .profilInfo {
@@ -177,7 +171,7 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  @include phone{
+  @include phone {
     flex-direction: column;
   }
   &__img {
@@ -186,20 +180,23 @@ export default {
     align-items: center;
     padding: 15px;
     width: 150px;
-      height: 150px;
-      border-radius: 75px;
-      object-fit: cover;
+    height: 150px;
+    border-radius: 90px;
+    object-fit: cover;
   }
 }
 .profilName {
   padding-left: 20px;
   font-size: 30px;
+  @include phone {
+    padding: 0px;
+  }
 }
 .profilModifier {
   padding: 130px 25px 20px 0px;
   @include phone {
-   padding: 0px;
-   padding-bottom: 20px;
+    padding: 0px;
+    padding-bottom: 20px;
   }
   @include tablet {
     padding: 135px 0px 20px 20%;
@@ -209,35 +206,27 @@ export default {
 .profilModif {
   display: flex;
   flex-direction: row;
-  margin-top: 40px;
-  @include phone{
-   flex-direction: column;
+  align-items: center;
+  margin: 40px 30px 30px 70px;
+  @include phone {
+    flex-direction: column;
+    margin: 40px 30px 30px 30px;
+
   }
-  &__content{
+  &__content {
     display: flex;
     flex-direction: row;
-    @include phone{
-   flex-direction: column;
-  }
-  }
-  &__email{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-left: 20px;
     @include phone {
-      margin-left: 0px;
-      
+      flex-direction: column;
     }
   }
-  &__img{
+  &__img {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-left: 20px;
     @include phone {
       margin-left: 0px;
-      
     }
   }
 }

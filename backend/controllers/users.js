@@ -7,15 +7,14 @@ const getAuthUserId = require('../middleware/getAuthUserId');
 const db = require('../models')
 const User = db.User;
 const Post = db.Post;
-/** d'importer le package 'file system' de Node pour accéder aux differentes opérations liées aux systèmes de fichiers
- *  ainsi on peut gérer les téléchargements et suppressions d'images ***/
+/*** Importer le package fs pour gérer les chemins des images */
 const fs = require('fs');
 /*** importer le package jsonwebtoken pour créer des tokens d'authentification et de les vérifier ***/
 const jwt = require('jsonwebtoken');
-/*** importer le package mot de passe pour exiger aux utilisateurs d'utiliser des mots de passes avec des majuscules, minuscules, chiffres et caractères spéciaux  ***/
+/*** importer le package qui permet de créer un model de mdp  ***/
 const passwordValidator = require('password-validator');
 
-/*** Créer le schéma pour garantir plus de sécurité aux mots de passes des utilisateurs ***/
+/*** Schéma du mdp ***/
 const schema = new passwordValidator();
 schema
     .is().min(6) /*** minimum 6 caractères ***/
@@ -36,15 +35,13 @@ exports.signup = async (req, res, next) => {
                 error: 'Votre mot de passe doit contenir des majuscules, des minisules, deux chiffres minimum et sans espaces',
             });
         } 
-        /*** Les chiffres et les symboles ne sont pas autorisés. Minimum 3 caractéres et Maximum 20 caractères ***/
+        /*** Regex pour les champs nécéssaire à l'incription ***/
        const fristNameRegex = /^([A-Za-z]{3,20})?([-]{0,1})?([A-Za-z\s]{3,20})$/;
         const lastNameRegex = /^([A-Za-z]{3,20})?([-]{0,1})?([A-Za-z\s]{3,20})$/;
         const mailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/ 
         if (fristNameRegex.test(req.body.firstName) && lastNameRegex.test(req.body.lastName) && mailRegex.test(req.body.email)) {
             /*** appeler bycrpt et hasher le mot de passe, l'algorithme fera 10 tours***/
 
-         
-                console.log(req.body.password, "hola")
             bcrypt.hash(req.body.password, 10)
             
                 /*** Création du user ***/

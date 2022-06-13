@@ -39,8 +39,10 @@
         placeholder="Mot de passe"
         required
       />
-      <div class="message">{{ message }}</div>
-      <button @click.prevent="login()" class="button btn-red">
+       <div v-if="error" class="error" role="altert" id="msgError">
+      {{ error }}
+    </div>
+      <button @click.prevent="login()" class="button align btn-red">
         <span> Connexion </span>
       </button>
     </form>
@@ -90,9 +92,11 @@
             @change="selectFile()"
           />
 
-      <div class="eMessage">{{ emessage }}</div>
+       <div v-if="error" class="error" role="altert" id="msgError">
+      {{ error }}
+    </div>
 
-      <button @click.prevent="signup()" class="button btn-orange" type="submit">
+      <button @click.prevent="signup()" class="button align btn-orange" type="submit">
         <span>S'inscrire</span>
       </button>
     </form>
@@ -113,8 +117,7 @@ export default {
       password: "",
       image:"",
       imageUrl: "",
-      message: "",
-      emessage: "",
+      error: "",
        dataLogin: {
         email: "",
         password: "",
@@ -188,13 +191,22 @@ if (
 @include button;
 @include btn-red;
 @include btn-orange;
+
+.align {
+  margin-bottom: 20px;
+}
+
+#msgError {
+  margin-top: 20px;
+}
+
 .signupForm {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 30px;
   width: 600px;
-  height: 600px;
+  height: auto;
   background-color: #fff;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   border-radius: 40px;
@@ -230,10 +242,7 @@ if (
     }
   }
 }
-.message {
-  color: red
-}
-.eMessage{
+.error {
   color: red;
 }
 </style>

@@ -31,7 +31,7 @@ footer {
     padding-top: 10px;
   }
   a {
-    font-size: 10px;
+    font-size: 12px;
     color: black;
   }
 }

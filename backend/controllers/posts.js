@@ -1,5 +1,3 @@
-/** d'importer le package 'file system' de Node pour accéder aux differentes opérations liées aux systèmes de fichiers
- *  ainsi on peut gérer les téléchargements et suppressions d'images ***/
 const fs = require("fs");
 /*** importer les modèles ***/
 let db = require("../models");
@@ -157,7 +155,6 @@ exports.deletePost = (req, res, next) => {
 };
 /* Afficher un seul message */
 exports.getOnePost = (req, res, next) => {
-  /*** on récupére id du post depuis la base de données ***/
   Post.findOne({
     where: {
       id: req.params.id,
@@ -177,7 +174,6 @@ exports.getOnePost = (req, res, next) => {
 };
 /***  Afficher les posts ***/
 exports.getAllPosts = (req, res, next) => {
-  /*** on récupère tous les posts ***/
   Post.findAll({
     include: [
       {
@@ -186,49 +182,44 @@ exports.getAllPosts = (req, res, next) => {
       },
     ],
   })
-  
-    /*** si tout est ok ***/
+
     .then((posts) =>
       res.status(200).json({
         posts,
       })
     )
-    /*** sinon on envoie une erreur ***/
     .catch((error) =>
       res.status(400).json({
         error,
       })
     );
-    };
+};
 /*** Afficher les posts d'un utilisateur ***/
 exports.findAllPostUser = (req, res, next) => {
-  /*** On recupère tout les posts */
   Post.findAll({
-    
-    include: [{
-      model: User,
-      
-    }],
+    include: [
+      {
+        model: User,
+      },
+    ],
     where: {
-      userId: req.params.userId 
+      userId: req.params.userId,
     },
   })
-  
-  /*** Si tout est ok */
-  .then((posts) => 
-  res.status(200).json({
-    posts,
-  })
-  )
-  /*** Sinon on renvoie une erreur ***/
-  .catch(error => 
-    res.status(400).json({
-    error,
-  })
-  )
-};
- 
 
+    .then((posts) =>
+      res.status(200).json({
+        posts,
+      })
+    )
+    .catch((error) =>
+      res.status(400).json({
+        error,
+      })
+    );
+};
+
+/*** Supprimer les posts quand on est Admin ***/
 exports.adminDeletePost = (req, res, next) => {
   Post.findOne({
     where: {
@@ -275,4 +266,3 @@ exports.adminDeletePost = (req, res, next) => {
     }
   });
 };
-

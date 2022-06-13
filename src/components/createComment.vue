@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form action="" class="conment__form">
+        <form action="" class="comment__form">
           
             <input v-bind="$attrs" aria-label="créer un commentaire" class="conment__Form__input" name="content" ref="content" placeholder="votre commentaire">
         <button
@@ -14,6 +14,9 @@
         > <span> envoyer com </span>
         </button>
         </form>
+         <div v-if="error" class="commentError" role="altert" id="msgError">
+      {{ error }}
+    </div>
     </div>
 </template>
 
@@ -31,16 +34,19 @@ export default {
       content: "",
       comment: {},
       comments: [],
+      error: ""
     };
   },
   methods: {
     postComment() {
+      if (this.content == "") {
+        this.error = "Message vide"
+      } else {
       axios
         .post("http://localhost:3000/api/comments", {
           userId: localStorage.getItem("userId"),
           postId: this.$refs.comment.id,
           content: this.$refs.content.value,
-          
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + this.token,
@@ -53,6 +59,7 @@ export default {
           console.log(error);
         });
       this.$refs.content.value = "";
+    }
     },
   },
 };
@@ -68,7 +75,7 @@ export default {
   display: none;
 }
 .comment__form {
-  margin: 10px 0px 10px 15px;
+  margin: 10px 0px 10px 30px;
   flex-direction: row;
   &__input {
     width: 300px;
@@ -84,6 +91,11 @@ export default {
       width: 150px;
     }
   }
+}
+
+.commentError {
+  margin-left: 15px;
+  color: red;
 }
 
 .btn-com {

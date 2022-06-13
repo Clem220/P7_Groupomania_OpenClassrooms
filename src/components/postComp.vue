@@ -8,7 +8,7 @@
         :key="user.id">
         <img
           v-if="user.imageUrl == null"
-          src="../assets/image-attractive.jpeg"
+          src="http://localhost:3000/images/image-attractive.jpeg1655060660257.jpg"
           alt="photo de profil provisoire"
           title="photo de profil"
           class="articleContent__headers__img"
@@ -31,8 +31,15 @@
         <span> {{ formatDate(post.createdAt) }} </span> 
       <button
         class="button btn-red"
-        v-if="user.id == post.userId || isAdmin == 'true'"
+        v-if="user.id == post.userId & isAdmin !== 'true' "
         @click="deletePublication(post.id)"
+      >
+        <span> Supprimer </span>
+      </button>
+      <button
+        class="button btn-red"
+        v-if="isAdmin == 'true'"
+        @click="deletePostAdmin(post.id)"
       >
         <span> Supprimer </span>
       </button>
@@ -68,7 +75,7 @@
         </div>
       </div>
     </article>
-   <createComment class="comment__form" v-bind="post"  @postCommentResponse="getComments()"/>
+   <createComment  v-bind="post"  @postCommentResponse="getComments()"/>
   </section>
 </template>
 <script>
@@ -102,7 +109,7 @@ export default {
   },
   async created() {
     await axios
-      .get("http://localhost:3000/api/users", {
+      .get("/api/users", {
         headers: {
           Authorization: "Bearer " + this.token,
           "Content-Type": "application/json",
@@ -154,6 +161,18 @@ export default {
         hour: "numeric",
         minute: "numeric",
       });
+    },
+    async deletePostAdmin(id) {
+      await axios
+        .delete(`http://localhost:3000/api/admin/delete/posts/${id}`, {
+          headers: {
+            Authorization: "Bearer " + this.token,
+          },
+        })
+        .then(() => {
+          let i = this.posts.map((data) => data.id).indexOf(id);
+          this.posts.splice(i, 1);
+        });
     },
     async deletePublication(id) {
       let confirmDeletePost = confirm(
@@ -295,7 +314,7 @@ export default {
     &__img{
       width: 75px;
       height: 75px;
-      border-radius: 35px;
+      border-radius: 40px;
       object-fit: cover;
       margin: 20px 20px 10px 0px;
     }
@@ -359,7 +378,6 @@ export default {
       padding-right: 20px;
     }
     span {
-      padding-right: 10px;
       font-size: 12px;
     }
     .date{

@@ -42,6 +42,9 @@
           />
         </div>
       </form>
+       <div v-if="error" class="newPostError" role="altert" id="msgError">
+      {{ error }}
+    </div>
     </article>
   </section>
 </template>
@@ -194,5 +197,9 @@ textarea {
     justify-content: space-between;
     margin-top: 10px;
   }
+}
+.newPostError {
+  color: red;
+  margin-bottom: 15px;
 }
 </style>

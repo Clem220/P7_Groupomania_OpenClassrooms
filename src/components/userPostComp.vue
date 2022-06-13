@@ -68,7 +68,7 @@
         </div>
       </div>
     </article>
-    <createComment class="comment__form" v-bind="post"  @postCommentResponse="getComments()"/>
+    <createComment  v-bind="post"  @postCommentResponse="getComments()"/>
   </section>
 </template>
 
@@ -128,7 +128,7 @@ data() {
       })
       .then((response) => {
         this.posts = response.data.posts;
-        console.log("hola",response);
+        console.log(response);
       })
       .catch((err) => console.log(err)); 
 
@@ -312,9 +312,9 @@ data() {
   &__post {
     width: 100%;
     img{
-      width: 620px;
-      height: 450px;
-      object-fit: content;
+      width: 100%;
+      max-width: 100%;
+      object-fit: cover;
     }
   }
 }
@@ -362,7 +362,6 @@ data() {
       padding-right: 20px;
     }
     span {
-      padding-right: 10px;
       font-size: 12px;
     }
     .date{
@@ -377,6 +376,8 @@ data() {
   max-width: 400px;
   word-wrap:break-word;
 }
+
+
 
 .btn-com {
   margin-top: 0px;

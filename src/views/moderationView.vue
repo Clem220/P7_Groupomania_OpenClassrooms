@@ -1,10 +1,12 @@
 <template>
   <navBar />
-  <h1>Les membres de Groupomania</h1>
   <section class="content" >
+    <div>
+  <h1>Les membres de Groupomania</h1>
+    </div>
   <article class="content__memberCard" v-for="user in users" :key="user.id">
     <div class="content__memberCard__name">
-      <h3> Prénom: {{ user.firstName }} <br/> Nom: {{ user.lastName }} <br/> UserId: {{ user.id }}</h3>
+      <h3> Prénom: {{ user.firstName }} <br/> Nom: {{ user.lastName }} <br/></h3>
     </div>
     <div class="content__memberCard__email">
       <span>
@@ -39,8 +41,8 @@ export default {
       },
     };
   },
-  created() {
-    axios
+  async created() {
+    await  axios
       .get("/api/users", {
         headers: {
           Authorization: "Bearer " + sessionStorage.token,
@@ -48,7 +50,7 @@ export default {
       })
       .then((response) => {
         console.log(response);
-        this.users = response.data.users;
+        this.users = response.data.users
       })
 
       .catch((err) => console.log(err));
@@ -86,12 +88,16 @@ export default {
 
 h1{
   margin-top: 150px;
+  
+  justify-items: center;
+  justify-content: center;
 }
 .content{
   display: flex;
- flex-direction: row;
+ flex-direction: column;
  flex-wrap: wrap;
  justify-content: center;
+ align-items: center;
 &__memberCard{
   display: flex;
 flex-direction: column;
