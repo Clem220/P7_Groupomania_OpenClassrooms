@@ -29,6 +29,8 @@ http://localhost:8080/
 
 Backend
 
+Créez un dossier images dans le dossier backend, il stockera les photos envoyées par les utilisateurs de Groupomania.
+
 Ouvrir le dossier Backend dans le terminal de votre éditeur puis exécuter la commande:
 
 npm install
