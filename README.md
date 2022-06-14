@@ -4,9 +4,9 @@
 
 Il vous faut avoir installé sur votre machine :
 
-Git : https://git-scm.com/downloads
-Node.js : https://nodejs.org/en/
-MySql : https://dev.mysql.com/downloads/installer/
+* Git : https://git-scm.com/downloads
+* Node.js : https://nodejs.org/en/
+* MySql : https://dev.mysql.com/downloads/installer/
 
 Dans le dossier backend,  créer un fichier .env
 Ajoutez y les champs suivant en renseignant leurs valeurs: 
