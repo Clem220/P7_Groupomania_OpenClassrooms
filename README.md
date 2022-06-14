@@ -45,9 +45,10 @@ $ nodemon serve
 ```
 ## Création d'un admin:
 Dans un terminal accédez à votre base de données, entrez la ligne suivante pour connaitre les id des différents utilisateurs: 
-
+```
 $ SELECT * FROM Users;
-
+```
 Recherchez l'id voulut dans la réponse envoyée par le terminal puis entrez la ligne suivante:
-
+```
 $ UPDATE Users SET isAdmin = true WHERE id = (id de l'utilisateur concerné);
+```
