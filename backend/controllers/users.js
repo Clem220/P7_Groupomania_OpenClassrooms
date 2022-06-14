@@ -25,6 +25,7 @@ schema
     .has().not().spaces() /*** mot de passe ne doit pas avoir d'espace ***/
     .is().not().oneOf(['Passw0rd', 'Password123']); /*** Ces valeurs sont dans la liste noire ***/
 
+/*** Création de l'utilisateur ***/
 exports.signup = async (req, res, next) => {
     console.log(req.body.password, "hello")
     /*** si le mot de passe du visiteur ne respecte pas le schéma password ***/
@@ -43,8 +44,6 @@ exports.signup = async (req, res, next) => {
             /*** appeler bycrpt et hasher le mot de passe, l'algorithme fera 10 tours***/
 
             bcrypt.hash(req.body.password, 10)
-            
-                /*** Création du user ***/
                 .then((hash) => {
                     User.create({
                             id: req.body.id,
@@ -91,8 +90,7 @@ exports.signup = async (req, res, next) => {
     
 }
 
-
-/***POST/api/auth/login /connecter les utilisateurs existants ***/
+/*** login de l'utilisateur ***/
 exports.login = (req, res, next) => {
     try {
         /**** récupérer le user de la base de données avec findOne ***/
@@ -206,7 +204,6 @@ exports.deleteProfile = (req, res, next) => {
                     error
                 })
             }
-            /*** supprimer le user avec la fonction destroy ***/
             user.destroy({
                     where: {
                         id: req.params.id
@@ -222,8 +219,6 @@ exports.deleteProfile = (req, res, next) => {
 }
 /***  Afficher un profile ***/
 exports.getProfile = async (req, res, next) => {
-
-    /*** on récupére l'utilisateur depuis la base de données ***/
     try {
         const user = await User.findOne({
                 attributes: ['id', 'firstName', 'lastName', 'email', 'isAdmin', 'imageUrl'],
@@ -236,8 +231,6 @@ exports.getProfile = async (req, res, next) => {
                 user
             }))
 
-
-            /*** problème serveur ***/
             .catch(function (err) {
                 res.status(500).json({
                     error,
@@ -251,8 +244,7 @@ exports.getProfile = async (req, res, next) => {
 
 };
 
-/*** récupèrer les profiles ***/
-
+/*** récupèrer tout les profiles ***/
 exports.getAllProfiles = (req, res, next) => {
     User.findAll({
             attributes: ['id', 'firstName', 'lastName', 'email', 'imageUrl', 'isAdmin']
@@ -266,8 +258,8 @@ exports.getAllProfiles = (req, res, next) => {
 
 };
 
+/*** Supprimer un utilisateur lorsqu'on est Admin ***/
 exports.adminDeleteProfileUser = (req, res, next) => {
-    /*** supprimer le compte d'un user avec destroy ***/
     User.destroy({
             where: {
                 id: req.params.id

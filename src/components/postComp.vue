@@ -1,11 +1,18 @@
 <template>
-<newPostComp class="newPost" @postResponse="getPosts()"/>
-  <section class="postContent" :key="post.id" v-for="post in posts.slice().reverse()">
-    <article class="articleContent" >
-      <div class="articleContent__headers" v-for="user in users.filter((user) => {
+  <newPostComp class="newPost" @postResponse="getPosts()" />
+  <section
+    class="postContent"
+    :key="post.id"
+    v-for="post in posts.slice().reverse()"
+  >
+    <article class="articleContent">
+      <div
+        class="articleContent__headers"
+        v-for="user in users.filter((user) => {
           return user.id == post.userId;
         })"
-        :key="user.id">
+        :key="user.id"
+      >
         <img
           v-if="user.imageUrl == null"
           src="http://localhost:3000/images/image-attractive.jpeg1655060660257.jpg"
@@ -19,52 +26,55 @@
           class="articleContent__headers__img"
           alt="profile picture"
           title="picture profile"
-          
         />
         <h3>{{ user.firstName }} {{ user.lastName }}</h3>
       </div>
       <div class="articleContent__post">
         <p class="articleContent__content">{{ post.content }}</p>
-        <img v-if="post.imageUrl != null" :src= "post.imageUrl" alt="image du post" >
+        <img
+          v-if="post.imageUrl != null"
+          :src="post.imageUrl"
+          alt="image du post"
+        />
       </div>
-     <div class="btn-content">
-        <span> {{ formatDate(post.createdAt) }} </span> 
-      <button
-        class="button btn-red"
-        v-if="user.id == post.userId & isAdmin !== 'true' "
-        @click="deletePublication(post.id)"
-      >
-        <span> Supprimer </span>
-      </button>
-      <button
-        class="button btn-red"
-        v-if="isAdmin == 'true'"
-        @click="deletePostAdmin(post.id)"
-      >
-        <span> Supprimer </span>
-      </button>
+      <div class="btn-content">
+        <span> {{ formatDate(post.createdAt) }} </span>
+        <button
+          class="button btn-red"
+          v-if="(user.id == post.userId) & (isAdmin !== 'true')"
+          @click="deletePublication(post.id)"
+        >
+          <span> Supprimer </span>
+        </button>
+        <button
+          class="button btn-red"
+          v-if="isAdmin == 'true'"
+          @click="deletePostAdmin(post.id)"
+        >
+          <span> Supprimer </span>
+        </button>
       </div>
     </article>
-
-    <article class="commentContent"  v-if="comment !== null">
+    <article class="commentContent" v-if="comment !== null">
       <div
         v-for="comment in comments.filter((comment) => {
-              return comment.postId == post.id;
-            })"
-            :key="comment.id"
+          return comment.postId == post.id;
+        })"
+        :key="comment.id"
         class="commentContent-align"
       >
-
-        <div v-for="user in users.filter((user) => {
-          return user.id == comment.userId;
-        })"
-        :key="user.id" class="commentContent__commentaire">
+        <div
+          v-for="user in users.filter((user) => {
+            return user.id == comment.userId;
+          })"
+          :key="user.id"
+          class="commentContent__commentaire"
+        >
           <h4>{{ user.firstName }} {{ user.lastName }}</h4>
         </div>
-          <p class="commentaireContent">{{ comment.content }}</p>
-
+        <p class="commentaireContent">{{ comment.content }}</p>
         <div class="commentContent__footer">
-          <span class="date">{{ formatDate(comment.createdAt) }}</span> 
+          <span class="date">{{ formatDate(comment.createdAt) }}</span>
           <button
             class="button btn-red btn-com"
             v-if="comment.userId == user.id || user.admin === true"
@@ -75,20 +85,20 @@
         </div>
       </div>
     </article>
-   <createComment  v-bind="post"  @postCommentResponse="getComments()"/>
+    <createComment v-bind="post" @postCommentResponse="getComments()" />
   </section>
 </template>
 <script>
 /* eslint-disable */
 import axios from "axios";
-import createComment from "@/components/createComment.vue"
+import createComment from "@/components/createComment.vue";
 import newPostComp from "@/components/newPostComp.vue";
 export default {
   name: "post",
   components: {
-        createComment,
-        newPostComp,
-    },
+    createComment,
+    newPostComp,
+  },
   data() {
     return {
       userId: localStorage.getItem("userId"),
@@ -104,10 +114,11 @@ export default {
       posts: [],
       comment: {},
       comments: [],
-      isAdmin: localStorage.getItem("isAdmin")
+      isAdmin: localStorage.getItem("isAdmin"),
     };
   },
   async created() {
+    /*** Récupération des users ***/
     await axios
       .get("/api/users", {
         headers: {
@@ -119,10 +130,11 @@ export default {
         this.users = response.data.users;
         console.log(this.users);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         alert(error);
         console.log(error);
       });
+    /*** Récupération des posts ***/
     await axios
       .get("http://localhost:3000/api/posts", {
         headers: {
@@ -133,26 +145,27 @@ export default {
         this.posts = response.data.posts;
         console.log(this.posts);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         alert(error);
         console.log(error);
-      }); 
+      });
+    /*** Récupération des commentaires ***/
     await axios
       .get("http://localhost:3000/api/comments", {
         headers: {
           Authorization: "Bearer " + this.token,
-          
         },
       })
       .then((response) => {
         this.comments = response.data;
         console.log(this.comments);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   },
   methods: {
+    /*** Création de la date du jour ***/
     formatDate(date) {
       return new Date(date).toLocaleDateString("fr-FR", {
         year: "numeric",
@@ -162,6 +175,7 @@ export default {
         minute: "numeric",
       });
     },
+    /*** Suppresion d'un posts quand on est Admin ***/
     async deletePostAdmin(id) {
       await axios
         .delete(`http://localhost:3000/api/admin/delete/posts/${id}`, {
@@ -174,6 +188,7 @@ export default {
           this.posts.splice(i, 1);
         });
     },
+    /*** Suppréssion d'un post que l'on à créé ***/
     async deletePublication(id) {
       let confirmDeletePost = confirm(
         "voulez-vous vraiment supprimer votre publication ?"
@@ -193,6 +208,7 @@ export default {
         return;
       }
     },
+    /*** Suppréssion d'un commentaire ***/
     async deleteComment(id) {
       let confirmDeleteComment = confirm(
         "voulez-vous vraiment supprimer votre commentaire ?"
@@ -213,6 +229,7 @@ export default {
         return;
       }
     },
+    /*** Récupération des posts ***/
     async getPosts() {
       await axios
         .get("http://localhost:3000/api/posts", {
@@ -225,11 +242,12 @@ export default {
           this.posts = response.data.posts;
           console.log(this.posts);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           alert(error);
           console.log(error);
         });
     },
+    /*** Récupération des commentaires ***/
     async getComments() {
       await axios
         .get("http://localhost:3000/api/comments", {
@@ -242,7 +260,7 @@ export default {
           this.comments = response.data;
           console.log(this.comments);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           alert(error);
           console.log(error);
         });
@@ -271,12 +289,12 @@ export default {
   height: auto;
   overflow: hidden;
   @include boxShadow;
-  @include phone{
-    @include phone-size
+  @include phone {
+    @include phone-size;
   }
-  @include tablet{
-    @include tablet-size
-  };
+  @include tablet {
+    @include tablet-size;
+  }
   &__content {
     height: auto;
     max-height: 200px;
@@ -284,18 +302,18 @@ export default {
   }
 }
 
-.btn-content{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    font-family: "Montserrat", sans-serif;
-    button{
-      width: 90px;
+.btn-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Montserrat", sans-serif;
+  button {
+    width: 90px;
     height: 30px;
     line-height: 30px;
     margin: 0px;
-    }
+  }
 }
 
 .articleContent {
@@ -311,7 +329,7 @@ export default {
     align-items: center;
     border-bottom: 1px solid #c2c2c2;
     @include montserrat;
-    &__img{
+    &__img {
       width: 75px;
       height: 75px;
       border-radius: 40px;
@@ -322,12 +340,12 @@ export default {
       padding-right: 40px;
     }
   }
-  &__content{
+  &__content {
     @include courier-prime;
   }
   &__post {
     width: 100%;
-    img{
+    img {
       width: 100%;
       max-width: 100%;
       height: auto;
@@ -346,7 +364,7 @@ export default {
   margin: 20px 30px 0px;
   padding-bottom: 10px;
   border-bottom: 1px solid #c2c2c2;
-  &-align{
+  &-align {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -356,17 +374,17 @@ export default {
     border-radius: 20px;
     padding: 0px 15px;
     @include courier-prime;
-    h6{
+    h6 {
       padding: 10px 10px;
       margin: 5px 0px;
- } 
-    p{
+    }
+    p {
       margin: 0;
     }
-    label{
+    label {
       display: none;
     }
- }
+  }
   &__footer {
     display: flex;
     flex-direction: row;
@@ -380,26 +398,26 @@ export default {
     span {
       font-size: 12px;
     }
-    .date{
+    .date {
       padding: 10px 0px;
       margin-right: 15px;
     }
   }
 }
 
-.commentaireContent{
+.commentaireContent {
   width: auto;
   padding: 5px 10px;
   max-width: 400px;
-  word-wrap:break-word;
+  word-wrap: break-word;
 }
 
 .btn-com {
   margin-top: 0px;
   width: 90px;
-    height: 30px;
-    line-height: 30px;
-  &-width{
+  height: 30px;
+  line-height: 30px;
+  &-width {
     width: 50px;
     margin: 0px 0px 5px 20px;
   }

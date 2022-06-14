@@ -1,13 +1,12 @@
 <template>
   <navComp />
   <profilComp />
-  <userPostComp
-    @deletePostEvent="deletePost"
-  />
+  <userPostComp @deletePostEvent="deletePost" />
   <footerComp />
 </template>
 
 <script>
+/*** Imports des composants */
 import navComp from "@/components/navComp.vue";
 import profilComp from "@/components/profilComp.vue";
 import userPostComp from "@/components/userPostComp";
@@ -39,21 +38,20 @@ export default {
       comment: {},
       comments: [],
     };
-
   },
- async created() {
-    
- await   axios
-      .get(`/api/users/${this.userId}` , {
+  async created() {
+    /*** Récupération de user */
+    await axios
+      .get(`/api/users/${this.userId}`, {
         headers: {
           Authorization: "Bearer " + sessionStorage.token,
         },
       })
       .then((response) => (this.user = response.data))
       .catch((err) => console.log(err));
-   
-  await  axios
-      .get(`/api/posts/${this.userId}`  , {
+    /*** Récupération des posts */
+    await axios
+      .get(`/api/posts/${this.userId}`, {
         headers: {
           Authorization: "Bearer " + sessionStorage.token,
         },
@@ -61,9 +59,10 @@ export default {
       .then((response) => {
         this.posts = response.data.posts;
       })
-      .catch((err) => console.log(err)); 
-  }, 
+      .catch((err) => console.log(err));
+  },
   methods: {
+    /*** Suppréssion d'un post */
     deletePost(item) {
       axios
         .delete("/api/auth/posts/" + item.id, {
@@ -95,11 +94,11 @@ export default {
   width: 910px;
   height: 185px;
   margin-top: 140px;
-  @include phone{
+  @include phone {
     @include phone-size;
     height: auto;
   }
-  @include tablet{
+  @include tablet {
     @include tablet-size;
   }
 }

@@ -1,14 +1,15 @@
 <template>
-<nav>
-      <img src="../assets/icon-left-font.png" alt="logo groupomania" />
-</nav>
-  <section >
+  <nav>
+    <img src="../assets/icon-left-font.png" alt="logo groupomania" />
+  </nav>
+  <section>
     <signupComp />
   </section>
-    <footerComp />
+  <footerComp />
 </template>
 
 <script>
+/*** Imports des composants */
 import FooterComp from "@/components/footerComp.vue";
 import signupComp from "@/components/signUpComp.vue";
 
@@ -18,18 +19,17 @@ export default {
     signupComp,
     FooterComp,
   },
-
-}
+};
 </script>
 
 <style lang="scss" scoped>
-@import '@/style/mixins';
-nav{
+@import "@/style/mixins";
+nav {
   display: flex;
   justify-content: center;
   width: 100%;
   background-color: #fff;
-  img{
+  img {
     width: 60%;
     height: auto;
   }

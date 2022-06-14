@@ -1,16 +1,20 @@
 <template>
   <nav>
     <router-link to="/postView" aria-label="accueil">
-      <img src="../assets/icon-left-font.png" alt="logo de Groupomania" rel="preload" />
+      <img
+        src="../assets/icon-left-font.png"
+        alt="logo de Groupomania"
+        rel="preload"
+      />
     </router-link>
     <div class="navContent">
-    <router-link to="/moderationView" v-if="isAdmin === 'true'">
+      <router-link to="/moderationView" v-if="isAdmin === 'true'">
         <span>Members</span>
       </router-link>
-      <router-link to="/profilView" aria-label="profil" >
+      <router-link to="/profilView" aria-label="profil">
         <span>Profil</span>
       </router-link>
-      <router-link to="/" @click = logout()>
+      <router-link to="/" @click="logout()">
         <span>Déconnexion</span>
       </router-link>
     </div>
@@ -21,8 +25,8 @@
 /* eslint-disable */
 
 export default {
-        name: 'navComp',
-        data() {
+  name: "navComp",
+  data() {
     return {
       user: {
         id: localStorage.getItem("userId"),
@@ -32,22 +36,22 @@ export default {
       users: [],
       userId: localStorage.getItem("userId"),
       isAdmin: localStorage.getItem("isAdmin"),
-      
-    }  
-},
+    };
+  },
 
- methods:{
-            logout(){
-                sessionStorage.clear();
-                localStorage.clear();
-                this.$router.push('/')
-            },
-        }, 
-}
+  methods: {
+    /*** Déconnection ***/
+    logout() {
+      sessionStorage.clear();
+      localStorage.clear();
+      this.$router.push("/");
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-@import '../style/mixins';
+@import "../style/mixins";
 nav {
   display: flex;
   position: fixed;
@@ -59,11 +63,11 @@ nav {
   height: 100px;
   z-index: 1;
   @include montserrat;
-@include phone {
- flex-direction: column;
- height: 105px;
- align-items: center;
-}
+  @include phone {
+    flex-direction: column;
+    height: 105px;
+    align-items: center;
+  }
 }
 img {
   width: 480px;

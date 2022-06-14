@@ -43,7 +43,6 @@
         <span> Supprimer compte </span>
       </button>
     </div>
-    
   </div>
 </template>
 
@@ -69,6 +68,7 @@ export default {
       mode: "profil",
     };
   },
+  /*** Récupération de l'user actuel */
   async created() {
     await axios
       .get(`http://localhost:3000/api/users/${this.userId}`, {
@@ -84,16 +84,19 @@ export default {
       });
   },
   methods: {
+    /*** Permet d'afficher Profil ***/
     switchToProfil: function () {
       this.mode = "profil";
     },
     switchToProfilModif: function () {
       this.mode = "profilModif";
     },
+    /*** Création de l'url */
     filePictureToUpload() {
       this.image = this.$refs.image.files[0];
       this.imageUrl = URL.createObjectURL(this.image);
     },
+    /*** Modifier sa photo de profil */
     async updatePicture() {
       const formData = new FormData();
       formData.append("userId", parseInt(localStorage.getItem("userId")));
@@ -114,6 +117,7 @@ export default {
           this.image = response.data.image;
         });
     },
+    /*** Supprimer son compte ***/
     async deleteMyAccount(id) {
       let confirmDeleteUser = confirm(
         " la suppresion du compte est irréversible, voulez-vous vraiment supprimer le compte ?"
@@ -211,7 +215,6 @@ export default {
   @include phone {
     flex-direction: column;
     margin: 40px 30px 30px 30px;
-
   }
   &__content {
     display: flex;

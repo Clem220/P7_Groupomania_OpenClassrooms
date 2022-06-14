@@ -13,7 +13,7 @@
           aria-label="Rédiger un nouveau message"
         />
         <div class="newPost__button">
-        <input
+          <input
             type="file"
             ref="image"
             id="image"
@@ -22,15 +22,15 @@
             @change="selectFile()"
           />
           <span class="btn__width">
-          <button
-          type="submit"
-          class="button btn-orange width"
-          aria-label="Publier le message"
-          @click.prevent="addPost()"
-        >
-          <span> Publier </span>
-        </button>
-        </span>
+            <button
+              type="submit"
+              class="button btn-orange width"
+              aria-label="Publier le message"
+              @click.prevent="addPost()"
+            >
+              <span> Publier </span>
+            </button>
+          </span>
         </div>
         <div id="preview" class="newPost__preview">
           <img
@@ -42,20 +42,18 @@
           />
         </div>
       </form>
-       <div v-if="error" class="newPostError" role="altert" id="msgError">
-      {{ error }}
-    </div>
+      <div v-if="error" class="newPostError" role="altert" id="msgError">
+        {{ error }}
+      </div>
     </article>
   </section>
 </template>
 
 <script>
 import axios from "axios";
-
 export default {
   name: "newPostComp",
-
-   data() {
+  data() {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
@@ -66,6 +64,7 @@ export default {
     };
   },
   methods: {
+    /*** Création de l'URL */
     selectFile() {
       this.image = this.$refs.image.files[0];
       this.imageUrl = URL.createObjectURL(this.image);
@@ -106,10 +105,10 @@ export default {
 @include button;
 @include btn-orange;
 
-  .width {
-    width: 200px;
-    margin: 15px;
-    @include phone {
+.width {
+  width: 200px;
+  margin: 15px;
+  @include phone {
     width: 150px;
     justify-content: center;
     display: flex;
@@ -127,7 +126,6 @@ textarea {
     max-height: 90px;
   }
   @include tablet {
-
     max-width: 440px;
     max-height: 100px;
   }
@@ -160,7 +158,7 @@ textarea {
     flex-direction: column;
     align-items: center;
     margin-top: 25px;
-    label{
+    label {
       display: none;
     }
     &__text {
@@ -168,20 +166,19 @@ textarea {
       height: 100px;
       @include courier-prime;
     }
-    
   }
-  &__button{
+  &__button {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 10px;
-    input{
-      @include phone{
-      margin: 10px 17px 10px;
-    }
+    input {
+      @include phone {
+        margin: 10px 17px 10px;
+      }
     }
   }
-  &__preview{
+  &__preview {
     display: flex;
     flex-direction: column;
     align-items: center;

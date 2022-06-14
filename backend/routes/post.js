@@ -1,8 +1,8 @@
-/*** importer express pour avoir le router ***/
+/*** Importer express pour acceder au router ***/
 const express = require("express");
-/*** appeler le router avec la méthode express/ il va nous permettre d'utiliser le mot router. à la place de app. ***/
+/*** Appeler le router avec la méthode express/ ***/
 const router = express.Router();
-/*** la récupération de  la configuration d'authentification de JsonWebToken ***/
+/*** Récupération de la configuration d'authentification de JsonWebToken ***/
 const auth = require("../middleware/auth");
 const authAdmin = require('../middleware/authAdmin')
 
@@ -10,7 +10,6 @@ const authAdmin = require('../middleware/authAdmin')
 const postCtrl = require("../controllers/posts");
 /*** importer multer pour la gestion des images ***/
 const multer = require('../middleware/multer-config');
-
 
 /*** Requête POST pour poster un nouveau post***/
 router.post("/posts", auth, multer, postCtrl.createPost);
@@ -30,9 +29,8 @@ router.get("/posts/:userId", auth, multer, postCtrl.findAllPostUser);
 /*** Requête GET pour afficher un post en particulier ***/
 router.get("/posts/:id", auth, postCtrl.getOnePost);
 
-
 /*** Requête DELETE de l'administrateur pour supprimer un post  ***/
 router.delete('/admin/delete/posts/:id', authAdmin, multer, postCtrl.adminDeletePost);
 
-/*** exporter le router ***/
+/*** Exporter le router ***/
 module.exports = router;

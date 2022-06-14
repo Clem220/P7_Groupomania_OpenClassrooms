@@ -12,7 +12,7 @@
 </template>
 
 <style lang="scss" scoped>
-@import '@/style/mixins';
+@import "@/style/mixins";
 
 footer {
   display: flex;

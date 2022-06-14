@@ -1,11 +1,12 @@
-/*** importer express pour avoir le router ***/
+/*** Import express pour acceder au router ***/
 const express = require('express');
-/*** appeler le router avec la méthode express/ il va nous permettre d'utiliser le mot router. à la place de app. ***/
+/*** Appeler le router avec la méthode express ***/
 const router = express.Router();
 
-/*** la récupération de  la configuration d'authentification de JsonWebToken ***/
+/*** Récupération de la configuration d'authentification de JsonWebToken ***/
 const auth = require('../middleware/auth');
-/*** importer le controllers comment pour associer les fonctions aux routes***/
+
+/*** Importer le controllers comment pour associer les fonctions aux routes***/
 const commentCtrl = require('../controllers/comments');
 
 /*** Requête POST pour créer un nouveau commentaire ***/

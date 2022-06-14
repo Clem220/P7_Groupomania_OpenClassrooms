@@ -1,10 +1,11 @@
 <template>
-  <navBar /> 
-  <Post/>
+  <navBar />
+  <Post />
   <footerComp />
 </template>
 
 <script>
+/*** Imports des composants */
 import navBar from "@/components/navComp.vue";
 import Post from "@/components/postComp.vue";
 import footerComp from "@/components/footerComp.vue";
@@ -33,6 +34,7 @@ export default {
       comments: [],
     };
   },
+  /*** Récupération des utilisateurs */
   async created() {
     await axios
       .get("http://localhost:3000/api/users", {
@@ -45,14 +47,10 @@ export default {
         this.users = response.data.users;
         console.log(this.users);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         alert(error);
         console.log(error);
       });
-   
-  }, 
-  methods: {
-    
   },
 };
 </script>
