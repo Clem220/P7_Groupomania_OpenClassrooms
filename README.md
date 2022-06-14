@@ -17,32 +17,33 @@ DB_HOST = (lien de la base de données mysql ex:127.0.0.1)
 DB_NAME = (nom de la base de données mysql)
 SECRET_KEY = (clé de cryptage du token)
 
-## Frontend
+## Frontend:
 
 Ouvrir le dossier "src" dans le terminal de votre éditeur puis exécuter la commande:
-
+```
 $ npm install
-
+```
 puis
-
+```
 $ npm start
+```
 si le navigateur ne s'ouvre pas automatiquement allez à :
 
 http://localhost:8080/
 
-## Backend
+## Backend:
 
 Créez un dossier images dans le dossier backend, il stockera les photos envoyées par les utilisateurs de Groupomania.
 
 Ouvrir le dossier Backend dans le terminal de votre éditeur puis exécuter la commande:
-
+```
 $ npm install
-
+```
 puis
-
+```
 $ nodemon serve
-
-## Création d'un admin
+```
+## Création d'un admin:
 Dans un terminal accédez à votre base de données, entrez la ligne suivante pour connaitre les id des différents utilisateurs: 
 
 $ SELECT * FROM Users;
