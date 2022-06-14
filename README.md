@@ -1,10 +1,12 @@
-Projet 7 - Groupomania !
+# Projet 7 - Groupomania !
+***
+## Prérequis :
 
-7ème et dernier projet de la formation développeur web d'Openclassrooms. Créer un réseau social d'entreprise. La stack utilisée pour ce projet:
+Il vous faut avoir installé sur votre machine :
 
-VueJs 
-NodeJs + express + sequelize
-Mysql
+Git : https://git-scm.com/downloads
+Node.js : https://nodejs.org/en/
+MySql : https://dev.mysql.com/downloads/installer/
 
 Dans le dossier backend,  créer un fichier .env
 Ajoutez y les champs suivant en renseignant leurs valeurs: 
@@ -15,35 +17,36 @@ DB_HOST = (lien de la base de données mysql ex:127.0.0.1)
 DB_NAME = (nom de la base de données mysql)
 SECRET_KEY = (clé de cryptage du token)
 
-Frontend
+## Frontend
 
 Ouvrir le dossier "src" dans le terminal de votre éditeur puis exécuter la commande:
 
-npm install
+$ npm install
+
 puis
 
-npm start
+$ npm start
 si le navigateur ne s'ouvre pas automatiquement allez à :
 
 http://localhost:8080/
 
-Backend
+## Backend
 
 Créez un dossier images dans le dossier backend, il stockera les photos envoyées par les utilisateurs de Groupomania.
 
 Ouvrir le dossier Backend dans le terminal de votre éditeur puis exécuter la commande:
 
-npm install
+$ npm install
 
 puis
 
-nodemon serve
+$ nodemon serve
 
-Création d'un admin
+## Création d'un admin
 Dans un terminal accédez à votre base de données, entrez la ligne suivante pour connaitre les id des différents utilisateurs: 
 
-SELECT * FROM Users;
+$ SELECT * FROM Users;
 
 Recherchez l'id voulut dans la réponse envoyée par le terminal puis entrez la ligne suivante:
 
-UPDATE Users SET isAdmin = true WHERE id = (id de l'utilisateur concerné);
+$ UPDATE Users SET isAdmin = true WHERE id = (id de l'utilisateur concerné);
