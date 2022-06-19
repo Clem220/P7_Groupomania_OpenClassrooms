@@ -81,7 +81,7 @@ export default {
         this.error = "Message vide";
       } else {
         await axios
-          .post("http://localhost:3000/api/posts", formData, {
+          .post("/api/posts", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
               Authorization: "Bearer " + this.token,

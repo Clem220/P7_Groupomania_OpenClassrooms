@@ -136,7 +136,7 @@ export default {
       });
     /*** Récupération des posts ***/
     await axios
-      .get("http://localhost:3000/api/posts", {
+      .get("/api/posts", {
         headers: {
           Authorization: "Bearer " + this.token,
         },
@@ -151,7 +151,7 @@ export default {
       });
     /*** Récupération des commentaires ***/
     await axios
-      .get("http://localhost:3000/api/comments", {
+      .get("/api/comments", {
         headers: {
           Authorization: "Bearer " + this.token,
         },
@@ -178,7 +178,7 @@ export default {
     /*** Suppresion d'un posts quand on est Admin ***/
     async deletePostAdmin(id) {
       await axios
-        .delete(`http://localhost:3000/api/admin/delete/posts/${id}`, {
+        .delete(`/api/admin/delete/posts/${id}`, {
           headers: {
             Authorization: "Bearer " + this.token,
           },
@@ -195,7 +195,7 @@ export default {
       );
       if (confirmDeletePost == true) {
         await axios
-          .delete(`http://localhost:3000/api/posts/${id}`, {
+          .delete(`/api/posts/${id}`, {
             headers: {
               Authorization: "Bearer " + this.token,
             },
@@ -215,7 +215,7 @@ export default {
       );
       if (confirmDeleteComment == true) {
         await axios
-          .delete(`http://localhost:3000/api/comments/${id}`, {
+          .delete(`/api/comments/${id}`, {
             headers: {
               "Content-Type": "application/json",
               Authorization: "Bearer " + this.token,
@@ -232,7 +232,7 @@ export default {
     /*** Récupération des posts ***/
     async getPosts() {
       await axios
-        .get("http://localhost:3000/api/posts", {
+        .get("/api/posts", {
           headers: {
             Authorization: "Bearer " + this.token,
             "Content-Type": "application/json",
@@ -250,7 +250,7 @@ export default {
     /*** Récupération des commentaires ***/
     async getComments() {
       await axios
-        .get("http://localhost:3000/api/comments", {
+        .get("/api/comments", {
           headers: {
             Authorization: "Bearer " + this.token,
             "Content-Type": "application/json",

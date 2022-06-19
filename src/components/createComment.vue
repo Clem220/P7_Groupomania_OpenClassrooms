@@ -8,6 +8,7 @@
         class="conment__Form__input"
         name="content"
         ref="content"
+        v-model="content"
         placeholder="votre commentaire"
       />
       <button
@@ -19,7 +20,7 @@
         @click.prevent="postComment()"
         ref="comment"
       >
-        <span> envoyer com </span>
+        <span> Publier </span>
       </button>
     </form>
     <div v-if="error" class="commentError" role="altert" id="msgError">
@@ -45,7 +46,7 @@ export default {
   },
   methods: {
     /*** Poster un commentaire ***/
-    postComment() {
+    async postComment() {
       if (this.content == "") {
         this.error = "Message vide";
       } else {

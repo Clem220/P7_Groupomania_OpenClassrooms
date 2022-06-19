@@ -71,7 +71,7 @@ export default {
   /*** Récupération de l'user actuel */
   async created() {
     await axios
-      .get(`http://localhost:3000/api/users/${this.userId}`, {
+      .get(`/api/users/${this.userId}`, {
         headers: {
           Authorization: "Bearer " + this.token,
           "Content-Type": "application/json",
@@ -106,7 +106,7 @@ export default {
       console.log(this.imageUrl);
       console.log("test-récup", formData.get("imageUrl"));
       await axios
-        .put(`http://localhost:3000/api/users/${this.userId}`, formData, {
+        .put(`/api/users/${this.userId}`, formData, {
           headers: {
             Authorization: "Bearer " + this.token,
             "Content-Type": "multipart/form-data",

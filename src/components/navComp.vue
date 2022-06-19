@@ -23,7 +23,6 @@
 
 <script>
 /* eslint-disable */
-
 export default {
   name: "navComp",
   data() {

@@ -37,7 +37,7 @@ export default {
   /*** Récupération des utilisateurs */
   async created() {
     await axios
-      .get("http://localhost:3000/api/users", {
+      .get("/api/users", {
         headers: {
           Authorization: "Bearer " + this.token,
           "Content-Type": "application/json",

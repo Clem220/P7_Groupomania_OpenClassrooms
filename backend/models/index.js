@@ -12,7 +12,7 @@ const connection = mysql.createConnection({
   password: `${process.env.DB_PASSWORD}`
 });
 /*** Création de la base de donnée ***/
-connection.query(`CREATE DATABASE ${process.env.DB_NAME} `,
+connection.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME} `,
 function(err,results) {
   console.log(results);
   console.log(err);
@@ -60,7 +60,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
         PRIMARY KEY (id),
         CONSTRAINT fk_post_userId FOREIGN KEY (userId) REFERENCES Users(id) ON DELETE CASCADE ON UPDATE CASCADE
         ) ENGINE = InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8`).then(([results, metadata]) => {
-          console.log('Base de données créée !');
+          console.log('TABLE posts créée !');
         });
         
       /**** création de la table des commentaires ***/
@@ -76,7 +76,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
           CONSTRAINT fk_comment_post_id FOREIGN KEY (postId) REFERENCES Posts(id) ON DELETE CASCADE ON UPDATE CASCADE,
           CONSTRAINT fk_comment_user_id FOREIGN KEY (userId) REFERENCES Users(id) ON DELETE CASCADE ON UPDATE CASCADE
           ) ENGINE = InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;`).then(([results, metadata]) => {
-            console.log('Base de données créée !');
+            console.log('Table Comments créée !');
           })
           sequelize.query(`USE ${process.env.DB_NAME};`);
 

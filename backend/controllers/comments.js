@@ -1,6 +1,6 @@
 const getAuthUserId = require("../middleware/getAuthUserId");
 
-/*** importer les modèles ***/
+/*** import des modèles ***/
 const db = require('../models')
 const Comment = db.Comment;
 fs = require('fs')
@@ -30,7 +30,7 @@ exports.createComment = (req, res, next) => {
 },
 
 
-    /*** Affichage  des commentaires ***/
+    /*** Afficher les commentaires ***/
     exports.getComments = (req, res, next) => {
         Comment.findAll()
             .then((comments) => res.status(200).json(comments))

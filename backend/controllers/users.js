@@ -93,7 +93,6 @@ exports.signup = async (req, res, next) => {
 /*** login de l'utilisateur ***/
 exports.login = (req, res, next) => {
     try {
-        /**** récupérer le user de la base de données avec findOne ***/
         User.findOne({
                 where: {
                     email: req.body.email
